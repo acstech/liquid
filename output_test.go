@@ -1,10 +1,11 @@
 package liquid
 
 import (
-	"github.com/karlseguin/gspec"
-	"github.com/karlseguin/liquid/core"
 	"strconv"
 	"testing"
+
+	"github.com/acstech/liquid/core"
+	"github.com/karlseguin/gspec"
 )
 
 func TestOutputHandlesEmptyOutput(t *testing.T) {

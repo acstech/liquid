@@ -1,8 +1,9 @@
 package liquid
 
 import (
-	"github.com/karlseguin/liquid/core"
 	"sync"
+
+	"github.com/acstech/liquid/core"
 )
 
 var TemplateCache = &SimpleCache{lookup: make(map[string]core.Code)}

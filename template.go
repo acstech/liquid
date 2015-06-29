@@ -4,9 +4,10 @@ package liquid
 import (
 	"crypto/sha1"
 	"fmt"
-	"github.com/karlseguin/liquid/core"
 	"io"
 	"io/ioutil"
+
+	"github.com/acstech/liquid/core"
 )
 
 // A compiled liquid template

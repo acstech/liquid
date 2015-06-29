@@ -1,10 +1,11 @@
 package tags
 
 import (
-	"github.com/karlseguin/gspec"
-	"github.com/karlseguin/liquid/core"
-	"github.com/karlseguin/liquid/filters"
 	"testing"
+
+	"github.com/acstech/liquid/core"
+	"github.com/acstech/liquid/filters"
+	"github.com/karlseguin/gspec"
 )
 
 func init() {

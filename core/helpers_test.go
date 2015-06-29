@@ -1,8 +1,9 @@
 package core
 
 import (
-	"github.com/karlseguin/gspec"
 	"testing"
+
+	"github.com/karlseguin/gspec"
 )
 
 func TestSkipSpaceHandlesValueWithOnlySpaces(t *testing.T) {

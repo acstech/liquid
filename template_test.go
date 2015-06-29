@@ -1,8 +1,9 @@
 package liquid
 
 import (
-	"github.com/karlseguin/gspec"
 	"testing"
+
+	"github.com/karlseguin/gspec"
 )
 
 func TestParsesATextOnlyTemplate(t *testing.T) {

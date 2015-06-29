@@ -1,8 +1,8 @@
 package liquid
 
 import (
+	"github.com/acstech/liquid/core"
 	"github.com/karlseguin/bytepool"
-	"github.com/karlseguin/liquid/core"
 )
 
 var (

@@ -2,8 +2,9 @@ package liquid
 
 import (
 	"bytes"
-	"github.com/karlseguin/liquid/core"
 	"testing"
+
+	"github.com/acstech/liquid/core"
 )
 
 func TestLiteralRendersItself(t *testing.T) {

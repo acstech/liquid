@@ -2,8 +2,9 @@ package filters
 
 import (
 	"bytes"
-	"github.com/karlseguin/liquid/core"
 	"reflect"
+
+	"github.com/acstech/liquid/core"
 )
 
 var defaultJoin = (&JoinFilter{&core.StaticStringValue{" "}}).Join

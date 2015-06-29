@@ -1,9 +1,10 @@
 package tags
 
 import (
-	"github.com/karlseguin/gspec"
-	"github.com/karlseguin/liquid/core"
 	"testing"
+
+	"github.com/acstech/liquid/core"
+	"github.com/karlseguin/gspec"
 )
 
 func TestCommentFactoryForNormalComment(t *testing.T) {

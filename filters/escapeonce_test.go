@@ -1,8 +1,9 @@
 package filters
 
 import (
-	"github.com/karlseguin/gspec"
 	"testing"
+
+	"github.com/karlseguin/gspec"
 )
 
 func TestEscapesOnceAString(t *testing.T) {

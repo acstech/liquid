@@ -2,8 +2,9 @@ package tags
 
 import (
 	"bytes"
-	"github.com/karlseguin/gspec"
 	"testing"
+
+	"github.com/karlseguin/gspec"
 )
 
 func TEstRawFactory(t *testing.T) {

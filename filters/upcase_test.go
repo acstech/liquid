@@ -1,8 +1,9 @@
 package filters
 
 import (
-	"github.com/karlseguin/gspec"
 	"testing"
+
+	"github.com/karlseguin/gspec"
 )
 
 func TestUpcasesAString(t *testing.T) {

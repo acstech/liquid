@@ -1,9 +1,10 @@
 package filters
 
 import (
-	"github.com/karlseguin/liquid/core"
 	"reflect"
 	"sort"
+
+	"github.com/acstech/liquid/core"
 )
 
 // Creates a sort filter

@@ -1,8 +1,9 @@
 package filters
 
 import (
-	"github.com/karlseguin/gspec"
 	"testing"
+
+	"github.com/karlseguin/gspec"
 )
 
 func TestStripsNewLinesFromStirng(t *testing.T) {

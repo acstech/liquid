@@ -1,8 +1,8 @@
 package liquid
 
 import (
-	"github.com/karlseguin/liquid/core"
-	"github.com/karlseguin/liquid/filters"
+	"github.com/acstech/liquid/core"
+	"github.com/acstech/liquid/filters"
 )
 
 func init() {

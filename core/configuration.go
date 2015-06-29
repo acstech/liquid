@@ -1,8 +1,9 @@
 package core
 
 import (
-	"github.com/karlseguin/bytepool"
 	"io"
+
+	"github.com/karlseguin/bytepool"
 )
 
 var BytePool = bytepool.New(128, 4096)

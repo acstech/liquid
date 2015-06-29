@@ -3,8 +3,9 @@ package tags
 import (
 	"errors"
 	"fmt"
-	"github.com/karlseguin/liquid/core"
 	"io"
+
+	"github.com/acstech/liquid/core"
 )
 
 var endCapture = &End{"capture"}

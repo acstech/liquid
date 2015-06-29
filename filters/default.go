@@ -1,8 +1,9 @@
 package filters
 
 import (
-	"github.com/karlseguin/liquid/core"
 	"reflect"
+
+	"github.com/acstech/liquid/core"
 )
 
 var defaultDefaultFilter = (&DefaultFilter{EmptyValue}).Default

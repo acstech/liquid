@@ -1,8 +1,9 @@
 package filters
 
 import (
-	"github.com/karlseguin/liquid/core"
 	"html"
+
+	"github.com/acstech/liquid/core"
 )
 
 // Creates an escape filter

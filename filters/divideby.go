@@ -1,7 +1,7 @@
 package filters
 
 import (
-	"github.com/karlseguin/liquid/core"
+	"github.com/acstech/liquid/core"
 )
 
 func DivideByFactory(parameters []core.Value) core.Filter {

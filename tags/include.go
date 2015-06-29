@@ -1,8 +1,9 @@
 package tags
 
 import (
-	"github.com/karlseguin/liquid/core"
 	"io"
+
+	"github.com/acstech/liquid/core"
 )
 
 // Creates an include tag

@@ -3,9 +3,10 @@ package tags
 import (
 	"errors"
 	"fmt"
-	"github.com/karlseguin/liquid/core"
 	"io"
 	"reflect"
+
+	"github.com/acstech/liquid/core"
 )
 
 var (
