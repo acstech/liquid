@@ -1,4 +1,4 @@
-# Liquid Templates For Go
+# Liquid Templates For Go [![Build Status](https://travis-ci.org/acstech/liquid.svg)](https://travis-ci.org/acstech/liquid) [![Coverage Status](https://coveralls.io/repos/acstech/liquid/badge.svg)](https://coveralls.io/r/acstech/liquid)
 
 ```go
 template, err := liquid.ParseString("hello {{ name | upcase }}", nil)
