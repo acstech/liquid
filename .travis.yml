@@ -1,0 +1,21 @@
+language: go
+
+go:
+  - 1.4
+  - tip
+
+matrix:
+  allow_failures:
+    - go: tip
+
+before_install:
+  - go get github.com/modocache/gover
+  - go get github.com/mattn/goveralls
+  - go get golang.org/x/tools/cmd/cover
+
+script:
+  - go test -v -coverprofile=liquid.coverprofile
+  - go test -v -coverprofile=core.coverprofile ./core
+  - go test -v -coverprofile=tags.coverprofile ./tags
+  - $HOME/gopath/bin/gover
+  - $HOME/gopath/bin/goveralls -coverprofile=gover.coverprofile -service=travis-ci
