@@ -1,22 +1,22 @@
 language: go
-
 go:
-  - 1.4
-  - tip
-
+- 1.4
+- tip
 matrix:
   allow_failures:
-    - go: tip
-
+  - go: tip
 before_install:
-  - go get github.com/modocache/gover
-  - go get github.com/mattn/goveralls
-  - go get golang.org/x/tools/cmd/cover
-
+- go get github.com/modocache/gover
+- go get github.com/mattn/goveralls
+- go get golang.org/x/tools/cmd/cover
 script:
-  - go test -v -coverprofile=liquid.coverprofile
-  - go test -v -coverprofile=core.coverprofile ./core
-  - go test -v -coverprofile=filters.coverprofile ./filters
-  - go test -v -coverprofile=tags.coverprofile ./tags
-  - $HOME/gopath/bin/gover
-  - $HOME/gopath/bin/goveralls -coverprofile=gover.coverprofile -service=travis-ci
+- go test -v -coverprofile=liquid.coverprofile
+- go test -v -coverprofile=core.coverprofile ./core
+- go test -v -coverprofile=filters.coverprofile ./filters
+- go test -v -coverprofile=tags.coverprofile ./tags
+- "$HOME/gopath/bin/gover"
+- "$HOME/gopath/bin/goveralls -coverprofile=gover.coverprofile -service=travis-ci"
+notifications:
+  hipchat:
+    rooms:
+      secure: SZHn9p2vkjmUzxWZoPVMLmCwfq3jJNsNTj/PTO38GKNt0q5CB/WQaM7SLBoiaJYUARPzGCYfrUP7SAPCUX4rA/lWtZ2uWM5g2ZPd8FIPov3lD743zuCA0Ti5cXDYlDeeJAS+4EEqGX14UR2/z7XqTfS0K0qZBhEdKwbTajpoNvW2xtGZLKGOoztn68SI+IUbICvT1rkwkK5NLaQP61RAM1rfRJiA33fqEecXq4QnmDhcpRWaOtZUOFQdcCXuxe1aqdNfcfxOTJVshKXrKr0sOJ6BRvc2GTbKlTI+uvW6Q7i8SNdunozu1U43AVFwqspKUKN7+Tfqi6vNAi/urXemHT3YhEcB+uV/682/m4IawYoqWsYj8F+5ntR/onv02lauoGpEO3z69HOPJFWq3U9RgHVvG2/50sFEk1TmwiYLJ59pzhRN7/z2BUVCSyusLfLL/8nLbahSVgx8BBMLk5DH4MRZLIdStpYUPn6cYN3IjDWnelXhXlxJo0vIlkMqWnG7f4NM2IYxx3pTJXAxrTDBZvYUZtLcSt4bXEBQ08BR4iubpTa5WxfGvajtiXFZT3UYMXcQdTqotQ5k2ixh1R7k87259CTZxzEBQcYsl6oOyqXepO1EKkyXWBtmwrKXP4sLskFLujWl093j2UJCU5vL6PO0K+85D+MMXe+Tjkbny/8=
