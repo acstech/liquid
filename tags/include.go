@@ -3,6 +3,7 @@ package tags
 import (
 	"io"
 	"path/filepath"
+	"reflect"
 	"strings"
 
 	"github.com/acstech/liquid/core"
@@ -20,6 +21,7 @@ func IncludeFactory(p *core.Parser, config *core.Configuration) (core.Tag, error
 
 	scopeType := p.ReadName()
 	var scope core.Value
+
 	if scopeType == "with" || scopeType == "for" {
 		scope, err = p.ReadValue()
 		if err != nil {
@@ -63,17 +65,13 @@ func (i *Include) Execute(writer io.Writer, data map[string]interface{}) core.Ex
 		templateData[0] = toMap(scopedData, contextVariableName)
 	case "for":
 		scopedData := i.scope.Resolve(data)
-
-		switch typed := scopedData.(type) {
-		case []interface{}:
-			templateData = make([]map[string]interface{}, len(typed))
-			for i, item := range typed {
-				templateData[i] = toMap(item, contextVariableName)
-			}
-		case []map[string]interface{}:
-			templateData = make([]map[string]interface{}, len(typed))
-			for i, item := range typed {
-				templateData[i] = toMap(item, contextVariableName)
+		switch reflect.TypeOf(scopedData).Kind() {
+		case reflect.Slice:
+			// Userreflection to iterate over ANY kind of slice
+			slice := reflect.ValueOf(scopedData)
+			templateData = make([]map[string]interface{}, slice.Len())
+			for i := 0; i < slice.Len(); i++ {
+				templateData[i] = toMap(slice.Index(i).Interface(), contextVariableName)
 			}
 		default:
 			templateData[0] = toMap(scopedData, contextVariableName)
@@ -99,9 +97,10 @@ func toMap(data interface{}, contextVariableName string) map[string]interface{} 
 	if typed, ok := data.(map[string]interface{}); ok {
 		context = typed
 	} else {
-		context := make(map[string]interface{})
-		context[contextVariableName] = typed
+		context = make(map[string]interface{})
+		context[contextVariableName] = data
 	}
+
 	return context
 }
 
