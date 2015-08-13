@@ -6,14 +6,14 @@ import (
 	"io"
 	"testing"
 
-	"github.com/acstech/liquid"
+	"github.com/acstech/liquid/core"
 	"github.com/karlseguin/gspec"
 )
 
 func TestIncludeFactory(t *testing.T) {
 	spec := gspec.New(t)
 	parser := newParser("'test' %}Z")
-	tag, err := IncludeFactory(parser, liquid.Configure())
+	tag, err := IncludeFactory(parser, new(core.Configuration))
 	spec.Expect(err).ToBeNil()
 	spec.Expect(tag.Name()).ToEqual("include")
 	spec.Expect(parser.Current()).ToEqual(byte('Z'))
@@ -25,7 +25,7 @@ func TestIncludeTagExecutes(t *testing.T) {
 	testData := make(map[string]interface{})
 	testData["key"] = "test"
 
-	config := liquid.Configure().IncludeHandler(func(name string, writer io.Writer, data map[string]interface{}) {
+	config := new(core.Configuration).IncludeHandler(func(name string, writer io.Writer, data map[string]interface{}) {
 		writer.Write([]byte(fmt.Sprintf("%v", data["key"])))
 	})
 	tag, err := IncludeFactory(parser, config)
@@ -45,7 +45,7 @@ func TestIncludeTagWithExecutes(t *testing.T) {
 	testContext["key"] = "test"
 	testData["context"] = testContext
 
-	config := liquid.NoCache.IncludeHandler(func(name string, writer io.Writer, data map[string]interface{}) {
+	config := new(core.Configuration).IncludeHandler(func(name string, writer io.Writer, data map[string]interface{}) {
 		writer.Write([]byte(fmt.Sprintf("%v", data["key"])))
 	})
 	tag, err := IncludeFactory(parser, config)
@@ -60,6 +60,7 @@ func TestIncludeTagWithExecutes(t *testing.T) {
 func TestIncludeTagForExecutes(t *testing.T) {
 	spec := gspec.New(t)
 	parser := newParser("'test' for context %}")
+
 	testData := make(map[string]interface{})
 	testArray := make([]string, 3)
 	testArray[0] = "1"
@@ -67,7 +68,7 @@ func TestIncludeTagForExecutes(t *testing.T) {
 	testArray[2] = "3"
 	testData["context"] = testArray
 
-	config := liquid.NoCache.IncludeHandler(func(name string, writer io.Writer, data map[string]interface{}) {
+	config := new(core.Configuration).IncludeHandler(func(name string, writer io.Writer, data map[string]interface{}) {
 		writer.Write([]byte(fmt.Sprintf("%v", data["test"])))
 	})
 	tag, err := IncludeFactory(parser, config)
