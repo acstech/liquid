@@ -1,7 +1,6 @@
 package tags
 
 import (
-	"fmt"
 	"io"
 	"path/filepath"
 	"reflect"
@@ -82,7 +81,6 @@ func (i *Include) Execute(writer io.Writer, data map[string]interface{}) core.Ex
 				templateData[i] = toMap(slice.Index(i).Interface(), contextVariableName)
 			}
 		default:
-			fmt.Printf("Scoped Data: %+v\n", scopedData)
 			templateData[0] = toMap(scopedData, contextVariableName)
 		}
 	default:
