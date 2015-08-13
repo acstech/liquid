@@ -93,14 +93,12 @@ func toMap(data interface{}, contextVariableName string) map[string]interface{} 
 		return nil
 	}
 
-	var context map[string]interface{}
 	if typed, ok := data.(map[string]interface{}); ok {
-		context = typed
-	} else {
-		context = make(map[string]interface{})
-		context[contextVariableName] = data
+		return typed
 	}
 
+	context := make(map[string]interface{})
+	context[contextVariableName] = data
 	return context
 }
 
