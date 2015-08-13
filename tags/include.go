@@ -1,6 +1,7 @@
 package tags
 
 import (
+	"fmt"
 	"io"
 	"path/filepath"
 	"reflect"
@@ -65,15 +66,23 @@ func (i *Include) Execute(writer io.Writer, data map[string]interface{}) core.Ex
 		templateData[0] = toMap(scopedData, contextVariableName)
 	case "for":
 		scopedData := i.scope.Resolve(data)
+
+		// Resolve returns a byte array when resolved data is nil that we can't do
+		// anything with. Bail so we dont just iterate through an array of bytes.
+		if _, ok := scopedData.([]byte); ok {
+			return core.Normal
+		}
+
 		switch reflect.TypeOf(scopedData).Kind() {
 		case reflect.Slice:
-			// Userreflection to iterate over ANY kind of slice
+			// Use reflection to iterate over ANY kind of slice (except []byte - see above)
 			slice := reflect.ValueOf(scopedData)
 			templateData = make([]map[string]interface{}, slice.Len())
 			for i := 0; i < slice.Len(); i++ {
 				templateData[i] = toMap(slice.Index(i).Interface(), contextVariableName)
 			}
 		default:
+			fmt.Printf("Scoped Data: %+v\n", scopedData)
 			templateData[0] = toMap(scopedData, contextVariableName)
 		}
 	default:
