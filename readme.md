@@ -151,8 +151,6 @@ func includeHandler(name string, writer io.Writer, data map[string]interface{}) 
 }
 ```
 
-Sadly, include doesn't currently support the more advanced variations, such as specifying a specific value for the include or automatically including in a loop. However, the flexibility provided hopefully suffices for now.
-
 ## Errors
 `Render` shouldn't fail, but it doesn't always stay silent about mistakes. For the sake of helping debug issues, it can inject data within the template. For example, using the output tag such as {{ user.name.first | upcase }} when *user.name.first* doesn't map to valid data will result in the literal "{{user.name.first}}"" being injecting in the template.
 
