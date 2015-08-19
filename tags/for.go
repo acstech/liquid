@@ -215,7 +215,7 @@ func (f *For) loopIteration(state *LoopState, i int) {
 		state.Index0 = i
 		state.RIndex = state.Length - i
 		state.RIndex0 = l1 - i
-		state.First = i == l1
+		state.First = i == 0
 		state.Last = i == l1
 	}
 }
