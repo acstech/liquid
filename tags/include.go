@@ -96,7 +96,7 @@ func (i *Include) Execute(writer io.Writer, data map[string]interface{}) core.Ex
 	contextVariableName := strings.ToLower(name)
 
 	var templateData = make([]map[string]interface{}, 1)
-	var parameterData = make(map[string]interface{})
+	var parameterData = make(map[string]interface{}, len(i.parameters))
 
 	// Resolve values for all our parameters
 	for name, value := range i.parameters {
