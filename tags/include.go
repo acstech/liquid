@@ -19,27 +19,65 @@ func IncludeFactory(p *core.Parser, config *core.Configuration) (core.Tag, error
 		return nil, p.Error("Invalid include value")
 	}
 
-	scopeType := p.ReadName()
+	var scopeType string
 	var scope core.Value
+	var params map[string]core.Value
 
-	if scopeType == "with" || scopeType == "for" {
-		scope, err = p.ReadValue()
+	if p.SkipSpaces() == ',' {
+		params, err = readParameters(p)
 		if err != nil {
 			return nil, err
 		}
 	} else {
-		scopeType = ""
+		scopeType = p.ReadName()
+
+		if scopeType == "with" || scopeType == "for" {
+			scope, err = p.ReadValue()
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		if p.SkipSpaces() == ',' {
+			params, err = readParameters(p)
+			if err != nil {
+				return nil, err
+			}
+		}
 	}
 
 	p.SkipPastTag()
-	return &Include{value, config.GetIncludeHandler(), scopeType, scope}, nil
+	return &Include{value, config.GetIncludeHandler(), scopeType, scope, params}, nil
+}
+
+func readParameters(p *core.Parser) (map[string]core.Value, error) {
+	p.Forward()
+	parameters := make(map[string]core.Value)
+
+	for name := p.ReadName(); name != ""; name = p.ReadName() {
+		if p.SkipSpaces() == ':' {
+			p.Forward()
+			value, err := p.ReadValue()
+			if err != nil {
+				return nil, err
+			}
+			parameters[name] = value
+		}
+
+		if p.SkipSpaces() == ',' {
+			p.Forward()
+		}
+	}
+
+	return parameters, nil
 }
 
 type Include struct {
-	value     core.Value
-	handler   core.IncludeHandler
-	scopeType string
-	scope     core.Value
+	value      core.Value
+	handler    core.IncludeHandler
+	scopeType  string
+	scope      core.Value
+	parameters map[string]core.Value
 }
 
 func (i *Include) AddCode(code core.Code) {
@@ -58,6 +96,12 @@ func (i *Include) Execute(writer io.Writer, data map[string]interface{}) core.Ex
 	contextVariableName := strings.ToLower(name)
 
 	var templateData = make([]map[string]interface{}, 1)
+	var parameterData = make(map[string]interface{}, len(i.parameters))
+
+	// Resolve values for all our parameters
+	for name, value := range i.parameters {
+		parameterData[name] = value.Resolve(data)
+	}
 
 	switch i.scopeType {
 	case "with":
@@ -89,6 +133,10 @@ func (i *Include) Execute(writer io.Writer, data map[string]interface{}) core.Ex
 
 	if i.handler != nil {
 		for _, item := range templateData {
+			// Inject our parameters into the data context for the template
+			for name, value := range parameterData {
+				item[name] = value
+			}
 			i.handler(template, writer, item)
 		}
 	}
