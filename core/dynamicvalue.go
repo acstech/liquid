@@ -1,6 +1,7 @@
 package core
 
 import (
+	"context"
 	"reflect"
 	"strings"
 )
@@ -10,10 +11,10 @@ type DynamicValue struct {
 	index  Value
 }
 
-func NewDynamicValue(fields []string) *DynamicValue {
+func NewDynamicValue(ctx context.Context, fields []string) *DynamicValue {
 	value := &DynamicValue{fields, nil}
 	last := len(fields) - 1
-	if index, field, ok := unindexDynamicField(fields[last]); ok {
+	if index, field, ok := unindexDynamicField(ctx, fields[last]); ok {
 		fields[last] = field
 		value.index = index
 	}
@@ -62,7 +63,7 @@ func (v *DynamicValue) Underlying() interface{} {
 	return nil
 }
 
-func unindexDynamicField(field string) (Value, string, bool) {
+func unindexDynamicField(ctx context.Context, field string) (Value, string, bool) {
 	end := len(field) - 1
 	if field[end] != ']' {
 		return nil, field, false
@@ -77,7 +78,7 @@ func unindexDynamicField(field string) (Value, string, bool) {
 	if start == 0 {
 		return nil, field, false
 	}
-	value, err := NewParser([]byte(field[start+1:end] + " ")).ReadValue()
+	value, err := NewParser(ctx, []byte(field[start+1:end]+" ")).ReadValue()
 	if err != nil {
 		return nil, field, false
 	}

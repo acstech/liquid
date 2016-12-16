@@ -1,10 +1,12 @@
 package filters
 
 import (
+	"context"
+
 	"github.com/acstech/liquid/core"
 )
 
-func RemoveFactory(parameters []core.Value) core.Filter {
+func RemoveFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	if len(parameters) != 1 {
 		return Noop
 	}

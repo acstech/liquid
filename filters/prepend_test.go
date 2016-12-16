@@ -9,19 +9,19 @@ import (
 
 func TestPrependToAString(t *testing.T) {
 	spec := gspec.New(t)
-	filter := PrependFactory([]core.Value{stringValue("?!")})
+	filter := PrependFactory(nil, []core.Value{stringValue("?!")})
 	spec.Expect(filter("dbz", nil).(string)).ToEqual("?!dbz")
 }
 
 func TestPrependToBytes(t *testing.T) {
 	spec := gspec.New(t)
-	filter := PrependFactory([]core.Value{stringValue("boring")})
+	filter := PrependFactory(nil, []core.Value{stringValue("boring")})
 	spec.Expect(filter([]byte("so"), nil).(string)).ToEqual("boringso")
 }
 
 func TestPrependADynamicValue(t *testing.T) {
 	spec := gspec.New(t)
-	filter := PrependFactory([]core.Value{dynamicValue("local.currency")})
+	filter := PrependFactory(nil, []core.Value{dynamicValue("local.currency")})
 	data := map[string]interface{}{
 		"local": map[string]string{
 			"currency": "$",

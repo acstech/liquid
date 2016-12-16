@@ -1,11 +1,13 @@
 package filters
 
 import (
+	"context"
+
 	"github.com/acstech/liquid/core"
 )
 
 // Creates a size filter
-func SizeFactory(parameters []core.Value) core.Filter {
+func SizeFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	return Size
 }
 

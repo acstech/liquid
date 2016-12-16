@@ -1,13 +1,14 @@
 package filters
 
 import (
+	"context"
 	"reflect"
 
 	"github.com/acstech/liquid/core"
 )
 
 // Creates a first filter
-func FirstFactory(parameters []core.Value) core.Filter {
+func FirstFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	return First
 }
 

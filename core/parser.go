@@ -1,6 +1,7 @@
 package core
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strconv"
@@ -21,6 +22,7 @@ const (
 )
 
 type Parser struct {
+	ctx      context.Context
 	Position int
 	Data     []byte
 	Len      int
@@ -28,8 +30,9 @@ type Parser struct {
 	Line     int
 }
 
-func NewParser(data []byte) *Parser {
+func NewParser(ctx context.Context, data []byte) *Parser {
 	parser := &Parser{
+		ctx:      ctx,
 		Position: 0,
 		Data:     data,
 		Len:      len(data),
@@ -257,7 +260,7 @@ func (p *Parser) ReadDynamicValues() (Value, error) {
 			break
 		}
 	}
-	return NewDynamicValue(TrimStrings(values)), nil
+	return NewDynamicValue(p.ctx, TrimStrings(values)), nil
 }
 
 func (p *Parser) ReadName() string {
@@ -315,7 +318,7 @@ func (p *Parser) ReadFilters() ([]Filter, error) {
 				return nil, err
 			}
 		}
-		filters = append(filters, factory(parameters))
+		filters = append(filters, factory(p.ctx, parameters))
 		if p.SkipSpaces() == '|' {
 			p.Forward()
 			continue

@@ -1,12 +1,13 @@
 package filters
 
 import (
+	"context"
 	"strings"
 
 	"github.com/acstech/liquid/core"
 )
 
-func DebugFactory(parameter []core.Value) core.Filter {
+func DebugFactory(ctx context.Context, parameter []core.Value) core.Filter {
 	debug := &DebugFilter{parameter}
 	return debug.Debug
 }

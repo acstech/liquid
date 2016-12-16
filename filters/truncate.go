@@ -1,6 +1,8 @@
 package filters
 
 import (
+	"context"
+
 	"github.com/acstech/liquid/core"
 )
 
@@ -11,7 +13,7 @@ var (
 )
 
 // Creates an truncate filter
-func TruncateFactory(parameters []core.Value) core.Filter {
+func TruncateFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	switch len(parameters) {
 	case 0:
 		return defaultTruncate

@@ -1,13 +1,14 @@
 package filters
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/acstech/liquid/core"
 )
 
 // Creates a plus filter
-func ModuloFactory(parameters []core.Value) core.Filter {
+func ModuloFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	if len(parameters) == 0 {
 		return Noop
 	}

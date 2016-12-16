@@ -2,12 +2,13 @@ package filters
 
 import (
 	"bytes"
+	"context"
 	"strings"
 
 	"github.com/acstech/liquid/core"
 )
 
-func ReplaceFactory(parameters []core.Value) core.Filter {
+func ReplaceFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	if len(parameters) != 2 {
 		return Noop
 	}

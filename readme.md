@@ -28,9 +28,9 @@ The following tags are missing:
 By default the templates are cached in a pretty dumb cache. That is, once in the cache, items stay in the cache (there's no expiry). The cache can be disabled, on a per-template basis, via:
 
 ```go
-template, _ := liquid.Parse(someByteTemplate, liquid.Configure().Cache(nil))
+template, _ := liquid.Parse(ctx, someByteTemplate, liquid.Configure().Cache(nil))
 //OR
-template, _ := liquid.ParseString(someStringTemplate, liquid.NoCache)
+template, _ := liquid.ParseString(ctx, someStringTemplate, liquid.NoCache)
 ```
 
 Alternatively, you can provide your own `core.Cache` implementation which

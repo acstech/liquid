@@ -35,5 +35,5 @@ func TestCommentFactoryHandlesUnclosedComment(t *testing.T) {
 }
 
 func newParser(s string) *core.Parser {
-	return core.NewParser([]byte(s))
+	return core.NewParser(nil, []byte(s))
 }

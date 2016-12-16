@@ -1,13 +1,14 @@
 package filters
 
 import (
+	"context"
 	"reflect"
 
 	"github.com/acstech/liquid/core"
 )
 
 // Creates a last filter
-func LastFactory(parameters []core.Value) core.Filter {
+func LastFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	return Last
 }
 

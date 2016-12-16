@@ -1,13 +1,14 @@
 package filters
 
 import (
+	"context"
 	"html"
 
 	"github.com/acstech/liquid/core"
 )
 
 // creates an escapeonce filter
-func EscapeOnceFactory(parameters []core.Value) core.Filter {
+func EscapeOnceFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	return EscapeOnce
 }
 

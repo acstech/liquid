@@ -1,6 +1,7 @@
 package filters
 
 import (
+	"context"
 	"reflect"
 
 	"github.com/acstech/liquid/core"
@@ -9,7 +10,7 @@ import (
 var defaultDefaultFilter = (&DefaultFilter{EmptyValue}).Default
 
 // Creates a default filter
-func DefaultFactory(parameters []core.Value) core.Filter {
+func DefaultFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	if len(parameters) == 0 {
 		return defaultDefaultFilter
 	}

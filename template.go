@@ -2,6 +2,7 @@
 package liquid
 
 import (
+	"context"
 	"crypto/sha1"
 	"fmt"
 	"io"
@@ -32,13 +33,13 @@ func (t *Template) Name() string {
 }
 
 // Parse the bytes into a Liquid template
-func Parse(data []byte, config *core.Configuration) (*Template, error) {
+func Parse(ctx context.Context, data []byte, config *core.Configuration) (*Template, error) {
 	if config == nil {
 		config = defaultConfig
 	}
 	cache := config.GetCache()
 	if cache == nil {
-		return buildTemplate(data, config)
+		return buildTemplate(ctx, data, config)
 	}
 	hasher := sha1.New()
 	hasher.Write(data)
@@ -47,7 +48,7 @@ func Parse(data []byte, config *core.Configuration) (*Template, error) {
 	template := cache.Get(key)
 	if template == nil {
 		var err error
-		template, err = buildTemplate(data, config)
+		template, err = buildTemplate(ctx, data, config)
 		if err != nil {
 			return nil, err
 		}
@@ -57,17 +58,17 @@ func Parse(data []byte, config *core.Configuration) (*Template, error) {
 }
 
 // Parse the string into a liquid template
-func ParseString(data string, config *core.Configuration) (*Template, error) {
-	return Parse([]byte(data), config)
+func ParseString(ctx context.Context, data string, config *core.Configuration) (*Template, error) {
+	return Parse(ctx, []byte(data), config)
 }
 
 // Turn the contents of the specified file into a liquid template
-func ParseFile(path string, config *core.Configuration) (*Template, error) {
+func ParseFile(ctx context.Context, path string, config *core.Configuration) (*Template, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
-	return Parse(data, config)
+	return Parse(ctx, data, config)
 }
 
 func (t *Template) Render(writer io.Writer, data map[string]interface{}) {
@@ -86,8 +87,8 @@ func (t *Template) Execute(writer io.Writer, data map[string]interface{}) core.E
 	return core.Normal
 }
 
-func buildTemplate(data []byte, config *core.Configuration) (*Template, error) {
-	parser := core.NewParser(data)
+func buildTemplate(ctx context.Context, data []byte, config *core.Configuration) (*Template, error) {
+	parser := core.NewParser(ctx, data)
 	template := new(Template)
 	if err := extractTokens(parser, template, config); err != nil {
 		return nil, err

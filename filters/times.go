@@ -1,13 +1,14 @@
 package filters
 
 import (
+	"context"
 	"strconv"
 
 	"github.com/acstech/liquid/core"
 )
 
 // Creates a time filter
-func TimesFactory(parameters []core.Value) core.Filter {
+func TimesFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	if len(parameters) == 0 {
 		return Noop
 	}

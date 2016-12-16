@@ -1,6 +1,7 @@
 package filters
 
 import (
+	"context"
 	"regexp"
 
 	"github.com/acstech/liquid/core"
@@ -8,6 +9,6 @@ import (
 
 var stripHtml = &ReplacePattern{regexp.MustCompile("(?i)<script.*?</script>|<!--.*?-->|<style.*?</style>|<.*?>"), ""}
 
-func StripHtmlFactory(parameters []core.Value) core.Filter {
+func StripHtmlFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	return stripHtml.Replace
 }

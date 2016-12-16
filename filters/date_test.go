@@ -17,18 +17,18 @@ func init() {
 
 func TestDateNowWithBasicFormat(t *testing.T) {
 	spec := gspec.New(t)
-	filter := DateFactory([]core.Value{stringValue("%Y %m %d")})
+	filter := DateFactory(nil, []core.Value{stringValue("%Y %m %d")})
 	spec.Expect(filter("now", nil).(string)).ToEqual("2006 01 02")
 }
 
 func TestDateTodayWithBasicFormat(t *testing.T) {
 	spec := gspec.New(t)
-	filter := DateFactory([]core.Value{stringValue("%H:%M:%S%%")})
+	filter := DateFactory(nil, []core.Value{stringValue("%H:%M:%S%%")})
 	spec.Expect(filter("today", nil).(string)).ToEqual("15:04:05%")
 }
 
 func TestDateWithSillyFormat(t *testing.T) {
 	spec := gspec.New(t)
-	filter := DateFactory([]core.Value{stringValue("%w  %U  %j")})
+	filter := DateFactory(nil, []core.Value{stringValue("%w  %U  %j")})
 	spec.Expect(filter("2014-01-10 21:31:28 +0800", nil).(string)).ToEqual("5  02  10")
 }

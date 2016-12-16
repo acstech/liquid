@@ -1,11 +1,13 @@
 package filters
 
 import (
+	"context"
+
 	"github.com/acstech/liquid/core"
 )
 
 // Creates an prepend filter
-func PrependFactory(parameters []core.Value) core.Filter {
+func PrependFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	if len(parameters) == 0 {
 		return Noop
 	}
