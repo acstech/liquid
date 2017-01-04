@@ -27,9 +27,23 @@ var (
 func DateFactory(parameters []core.Value) core.Filter {
 	switch len(parameters) {
 	case 1:
-		return (&DateFilter{parameters[0], nil}).ToString
+		return (&DateFilter{format: parameters[0]}).ToString
 	case 2:
-		return (&DateFilter{parameters[0], parameters[1]}).ToString
+		switch parameters[1].(type) {
+		case *core.StaticIntValue, *core.StaticFloatValue:
+			return (&DateFilter{format: parameters[0], offset: parameters[1]}).ToString
+		}
+
+		return (&DateFilter{format: parameters[0], inputFormat: parameters[1]}).ToString
+
+	case 3:
+		switch parameters[1].(type) {
+		case *core.StaticIntValue, *core.StaticFloatValue:
+			return (&DateFilter{format: parameters[0], offset: parameters[1], inputFormat: parameters[2]}).ToString
+		}
+
+		return (&DateFilter{format: parameters[0], inputFormat: parameters[1], offset: parameters[2]}).ToString
+
 	default:
 		return Noop
 	}
@@ -37,20 +51,32 @@ func DateFactory(parameters []core.Value) core.Filter {
 
 // DateFilter ...
 type DateFilter struct {
-	format core.Value
-	offset core.Value
+	format      core.Value
+	offset      core.Value
+	inputFormat core.Value
 }
 
 // ToString converts input to formatted date string
 func (d *DateFilter) ToString(input interface{}, data map[string]interface{}) interface{} {
-	t, ok := inputToTime(input)
+
+	inputFormat := ""
+	if d.inputFormat != nil {
+		inputFormat = core.ToString(d.inputFormat.Resolve(data))
+	}
+
+	t, ok := inputToTime(input, inputFormat)
 	if ok == false {
 		return input
 	}
 
 	if d.offset != nil {
-		if offset, ok := core.ToInt(d.offset.Resolve(data)); ok {
-			t = t.Add(time.Duration(offset) * time.Hour)
+		offset := d.offset.Resolve(data)
+
+		switch typedOffset := offset.(type) {
+		case int:
+			t = t.Add(time.Duration(typedOffset) * time.Hour)
+		case float64:
+			t = t.Add(time.Duration(typedOffset*60) * time.Minute)
 		}
 	}
 
@@ -58,14 +84,14 @@ func (d *DateFilter) ToString(input interface{}, data map[string]interface{}) in
 	return strftime.Strftime(&t, format)
 }
 
-func inputToTime(input interface{}) (time.Time, bool) {
+func inputToTime(input interface{}, inputFormat string) (time.Time, bool) {
 	switch typed := input.(type) {
 	case time.Time:
 		return typed, true
 	case string:
-		return timeFromString(typed)
+		return timeFromString(typed, inputFormat)
 	case []byte:
-		return timeFromString(string(typed))
+		return timeFromString(string(typed), inputFormat)
 	}
 	if n, ok := core.ToInt(input); ok {
 		return core.Now().Add(time.Minute * time.Duration(n)), true
@@ -73,9 +99,15 @@ func inputToTime(input interface{}) (time.Time, bool) {
 	return zeroTime, false
 }
 
-func timeFromString(s string) (time.Time, bool) {
+func timeFromString(s, inputFormat string) (time.Time, bool) {
 	if s == "now" || s == "today" {
 		return core.Now(), true
+	}
+
+	if inputFormat != "" {
+		if t, err := time.Parse(inputFormat, s); err == nil {
+			return t, true
+		}
 	}
 
 	for _, f := range timeInputFormats {
