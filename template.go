@@ -23,6 +23,10 @@ func (t *Template) AddSibling(tag core.Tag) error {
 	return nil
 }
 
+func (t *Template) LastSibling() core.Tag {
+	return nil
+}
+
 func (t *Template) Type() core.TagType {
 	return core.ContainerTag
 }
@@ -129,6 +133,9 @@ func extractTokens(parser *core.Parser, container core.Tag, config *core.Configu
 				}
 				stack = stack[0:l]
 				container = stack[l-1]
+				if (container.LastSibling() != nil) {
+					container = container.LastSibling()
+				}
 				parser.SkipPastTag()
 			case core.SiblingTag:
 				if err := stack[len(stack)-1].AddSibling(tag); err != nil {

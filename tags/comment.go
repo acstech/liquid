@@ -53,6 +53,10 @@ func (c *Comment) AddSibling(tag core.Tag) error {
 	panic("AddSibling should not have been called on a comment")
 }
 
+func (c *Comment) LastSibling() core.Tag {
+	return nil
+}
+
 func (c *Comment) Execute(writer io.Writer, data map[string]interface{}) core.ExecuteState {
 	panic("Render should not have been called on a comment")
 }

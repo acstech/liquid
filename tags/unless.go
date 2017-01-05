@@ -41,6 +41,10 @@ func (u *Unless) AddSibling(tag core.Tag) error {
 	return nil
 }
 
+func (u *Unless) LastSibling() core.Tag {
+	return u.elseCondition
+}
+
 func (u *Unless) Execute(writer io.Writer, data map[string]interface{}) core.ExecuteState {
 	if u.condition.IsTrue(data) {
 		return u.Common.Execute(writer, data)

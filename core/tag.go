@@ -5,6 +5,7 @@ package core
 type Tag interface {
 	AddCode(code Code)
 	AddSibling(tag Tag) error
+	LastSibling() Tag
 	Name() string
 	Type() TagType
 	Code

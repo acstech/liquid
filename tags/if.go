@@ -26,6 +26,7 @@ func IfFactory(p *core.Parser, config *core.Configuration) (core.Tag, error) {
 		NewCommon(),
 		condition,
 		make([]IfSibling, 0, 3),
+		nil,
 	}
 	i.conditions = append(i.conditions, i)
 	p.SkipPastTag()
@@ -52,8 +53,9 @@ func EndIfFactory(p *core.Parser, config *core.Configuration) (core.Tag, error) 
 
 type If struct {
 	*Common
-	condition  core.Verifiable
-	conditions []IfSibling
+	condition   core.Verifiable
+	conditions  []IfSibling
+	lastSibling core.Tag
 }
 
 func (i *If) AddSibling(tag core.Tag) error {
@@ -62,7 +64,12 @@ func (i *If) AddSibling(tag core.Tag) error {
 		return errors.New(fmt.Sprintf("%q does not belong inside of an if"))
 	}
 	i.conditions = append(i.conditions, ifs)
+	i.lastSibling = tag
 	return nil
+}
+
+func (i *If) LastSibling() core.Tag {
+	return i.lastSibling
 }
 
 func (i *If) Execute(writer io.Writer, data map[string]interface{}) core.ExecuteState {
@@ -99,6 +106,10 @@ func (e *ElseIf) AddSibling(tag core.Tag) error {
 	panic("AddSibling should not have been called on a elseif")
 }
 
+func (e *ElseIf) LastSibling() core.Tag {
+	return nil
+}
+
 func (e *ElseIf) Name() string {
 	return "elseif"
 }
@@ -118,6 +129,10 @@ type Else struct {
 
 func (e *Else) AddSibling(tag core.Tag) error {
 	panic("AddSibling should not have been called on a else")
+}
+
+func (e *Else) LastSibling() core.Tag {
+	return nil
 }
 
 func (e *Else) Name() string {

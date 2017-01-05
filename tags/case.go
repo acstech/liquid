@@ -24,7 +24,7 @@ func CaseFactory(p *core.Parser, config *core.Configuration) (core.Tag, error) {
 		return nil, err
 	}
 	p.SkipPastTag()
-	return &Case{value, make([]CaseSibling, 0, 5)}, nil
+	return &Case{value, make([]CaseSibling, 0, 5), nil}, nil
 }
 
 func WhenFactory(p *core.Parser, config *core.Configuration) (core.Tag, error) {
@@ -41,8 +41,9 @@ func EndCaseFactory(p *core.Parser, config *core.Configuration) (core.Tag, error
 }
 
 type Case struct {
-	value      core.Value
-	conditions []CaseSibling
+	value       core.Value
+	conditions  []CaseSibling
+	lastSibling core.Tag
 }
 
 func (c *Case) AddCode(code core.Code) {}
@@ -54,7 +55,12 @@ func (c *Case) AddSibling(tag core.Tag) error {
 	}
 	c.conditions = append(c.conditions, cs)
 	cs.AddLeftValue(c.value)
+	c.lastSibling = tag
 	return nil
+}
+
+func (c *Case) LastSibling() core.Tag {
+	return c.lastSibling
 }
 
 func (c *Case) Execute(writer io.Writer, data map[string]interface{}) core.ExecuteState {
@@ -81,6 +87,10 @@ type When struct {
 
 func (w *When) AddSibling(tag core.Tag) error {
 	panic("AddSibling should not have been called on a when")
+}
+
+func (w *When) LastSibling() core.Tag {
+	return nil
 }
 
 func (w *When) Name() string {

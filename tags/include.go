@@ -88,6 +88,10 @@ func (i *Include) AddSibling(tag core.Tag) error {
 	panic("AddSibling should not have been called on a Include")
 }
 
+func (i *Include) LastSibling() core.Tag {
+	return nil
+}
+
 func (i *Include) Execute(writer io.Writer, data map[string]interface{}) core.ExecuteState {
 	template := core.ToString(i.value.Resolve(data))
 	_, filename := filepath.Split(template)
