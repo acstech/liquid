@@ -146,6 +146,148 @@ func TestTemplateRender1(t *testing.T) {
 	assertRender(t, template, d, "\nOut of\n\n- white \n- red \n- blue  \nYour favorite color was blue.\n---\n\nYoungn'\n\n---\n  0 is 68    2 is 110  ")
 }
 
+var complexNestedIfTemplate = `
+{% if false %}
+	x
+{% elseif false %}
+	x
+{% else %}
+	{% if false %}
+		x
+	{% elseif true %}
+
+		{% if true %}
+			1
+		{% elseif false %}
+			{% if true %}
+			x
+			{% else %}
+			x
+			{% endif %}
+
+			x
+		{% else %}
+			{% if true %}
+			x
+			{% else %}
+			x
+			{% endif %}
+
+			x
+		{% endif %}
+
+		2
+
+		{% if true %}
+			3
+		{% elseif false %}
+			{% if true %}
+			x
+			{% else %}
+			x
+			{% endif %}
+
+			x
+		{% else %}
+			{% if true %}
+			x
+			{% else %}
+			x
+			{% endif %}
+
+			x
+		{% endif %}
+	{% else %}
+		{% if true %}
+		x
+		{% else %}
+		x
+		{% endif %}
+
+		x
+	{% endif %}
+
+	4
+{% endif %}
+
+5`
+
+func TestTemplateRenderNestedIf(t *testing.T) {
+	d := map[string]interface{}{}
+	template, _ := ParseString(complexNestedIfTemplate, nil)
+	assertRender(t, template, d, " \n\t\n\n\t\t\n\t\t\t1\n\t\t\n\n\t\t2\n\n\t\t\n\t\t\t3\n\t\t\n\t\n\n\t4\n\n\n5")
+}
+
+var complexNestedCaseWithIfTemplate = `
+{% case a %}
+	{% when 0 %}
+		x
+	{% when 1 %}
+
+		{% case b %}
+			{% when 0 %}
+				x
+			{% when 1 %}
+				x
+			{% else %}
+				{% if true %}
+					1
+				{% elseif false %}
+					{% if true %}
+					x
+					{% else %}
+					x
+					{% endif %}
+
+					x
+				{% else %}
+					{% if true %}
+					x
+					{% else %}
+					x
+					{% endif %}
+
+					x
+				{% endif %}
+
+				2
+
+				{% if true %}
+					3
+				{% elseif false %}
+					{% if true %}
+					x
+					{% else %}
+					x
+					{% endif %}
+
+					x
+				{% else %}
+					{% if true %}
+					x
+					{% else %}
+					x
+					{% endif %}
+
+					x
+				{% endif %}
+		{% endcase %}
+
+		4
+	{% when 2 %}
+		x
+	{% else %}
+		x
+{% endcase %}
+
+5`
+
+func TestTemplateRenderNestedCaseAndIf(t *testing.T) {
+	d := map[string]interface{}{ "a" : 1, "b" : 2 }
+	template, _ := ParseString(complexNestedCaseWithIfTemplate, nil)
+	assertRender(t, template, d, " \n\n\t\t\n\t\t\t\t\n\t\t\t\t\t1\n\t\t\t\t\n\n\t\t\t\t2\n\n\t\t\t\t\n\t\t\t\t\t3\n\t\t\t\t\n\t\t\n\n\t\t4\n\t\n\n5")
+}
+
 func BenchmarkParseTemplateWithoutCache(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		ParseString(complexTemplate, NoCache)
