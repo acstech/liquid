@@ -42,6 +42,10 @@ func (a *Assign) AddSibling(tag core.Tag) error {
 	panic("AddSibling should not have been called on a Assign")
 }
 
+func (a *Assign) LastSibling() core.Tag {
+	return nil
+}
+
 func (a *Assign) Execute(writer io.Writer, data map[string]interface{}) core.ExecuteState {
 	value := a.value.Resolve(data)
 	if a.filters != nil {

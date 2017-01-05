@@ -24,6 +24,10 @@ func (b *Break) AddSibling(tag core.Tag) error {
 	panic("AddSibling should not have been called on a Break")
 }
 
+func (b *Break) LastSibling() core.Tag {
+	return nil
+}
+
 func (b *Break) Execute(writer io.Writer, data map[string]interface{}) core.ExecuteState {
 	return core.Break
 }

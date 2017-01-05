@@ -90,6 +90,10 @@ func (f *For) AddSibling(tag core.Tag) error {
 	return errors.New(fmt.Sprintf("%q does not belong inside of a for", tag.Name()))
 }
 
+func (f *For) LastSibling() core.Tag {
+	return nil
+}
+
 func (f *For) Execute(writer io.Writer, data map[string]interface{}) core.ExecuteState {
 	value := reflect.ValueOf(f.value.Resolve(data))
 	kind := value.Kind()

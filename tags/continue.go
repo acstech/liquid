@@ -24,6 +24,10 @@ func (c *Continue) AddSibling(tag core.Tag) error {
 	panic("AddSibling should not have been called on a Continue")
 }
 
+func (c *Continue) LastSibling() core.Tag {
+	return nil
+}
+
 func (c *Continue) Execute(writer io.Writer, data map[string]interface{}) core.ExecuteState {
 	return core.Continue
 }

@@ -33,6 +33,10 @@ func (c *Capture) AddSibling(tag core.Tag) error {
 	return errors.New(fmt.Sprintf("%q tag does not belong directly within a capture", tag.Name()))
 }
 
+func (c *Capture) LastSibling() core.Tag {
+	return nil
+}
+
 func (c *Capture) Execute(w io.Writer, data map[string]interface{}) core.ExecuteState {
 	writer := core.BytePool.Checkout()
 	defer writer.Close()
