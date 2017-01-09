@@ -19,7 +19,7 @@ func UnlessFactory(p *core.Parser, config *core.Configuration) (core.Tag, error)
 	}
 	p.SkipPastTag()
 	condition.Inverse()
-	return &Unless{NewCommon(), condition, nil}, nil
+	return &Unless{NewCommon(), condition, nil, nil}, nil
 }
 
 func EndUnlessFactory(p *core.Parser, config *core.Configuration) (core.Tag, error) {
@@ -30,6 +30,7 @@ type Unless struct {
 	*Common
 	condition     core.Verifiable
 	elseCondition *Else
+	lastSibling   core.Tag
 }
 
 func (u *Unless) AddSibling(tag core.Tag) error {
@@ -38,11 +39,12 @@ func (u *Unless) AddSibling(tag core.Tag) error {
 		return errors.New(fmt.Sprintf("%q does not belong as a sibling of an unless"))
 	}
 	u.elseCondition = e
+	u.lastSibling = tag
 	return nil
 }
 
 func (u *Unless) LastSibling() core.Tag {
-	return u.elseCondition
+	return u.lastSibling
 }
 
 func (u *Unless) Execute(writer io.Writer, data map[string]interface{}) core.ExecuteState {

@@ -133,7 +133,7 @@ func extractTokens(parser *core.Parser, container core.Tag, config *core.Configu
 				}
 				stack = stack[0:l]
 				container = stack[l-1]
-				if (container.LastSibling() != nil) {
+				if container.LastSibling() != nil {
 					container = container.LastSibling()
 				}
 				parser.SkipPastTag()
