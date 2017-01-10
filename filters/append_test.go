@@ -9,19 +9,19 @@ import (
 
 func TestAppendToAString(t *testing.T) {
 	spec := gspec.New(t)
-	filter := AppendFactory([]core.Value{stringValue("?!")})
+	filter := AppendFactory(nil, []core.Value{stringValue("?!")})
 	spec.Expect(filter("dbz", nil).(string)).ToEqual("dbz?!")
 }
 
 func TestAppendToBytes(t *testing.T) {
 	spec := gspec.New(t)
-	filter := AppendFactory([]core.Value{stringValue("boring")})
+	filter := AppendFactory(nil, []core.Value{stringValue("boring")})
 	spec.Expect(filter([]byte("so"), nil).(string)).ToEqual("soboring")
 }
 
 func TestAppendADynamicValue(t *testing.T) {
 	spec := gspec.New(t)
-	filter := AppendFactory([]core.Value{dynamicValue("local.currency")})
+	filter := AppendFactory(nil, []core.Value{dynamicValue("local.currency")})
 	data := map[string]interface{}{
 		"local": map[string]string{
 			"currency": "$",

@@ -8,18 +8,18 @@ import (
 
 func TestDowncasesAString(t *testing.T) {
 	spec := gspec.New(t)
-	filter := DowncaseFactory(nil)
+	filter := DowncaseFactory(nil, nil)
 	spec.Expect(filter("DBZ", nil).(string)).ToEqual("dbz")
 }
 
 func TestDowncasesBytes(t *testing.T) {
 	spec := gspec.New(t)
-	filter := DowncaseFactory(nil)
+	filter := DowncaseFactory(nil, nil)
 	spec.Expect(string(filter([]byte("DBZ"), nil).([]byte))).ToEqual("dbz")
 }
 
 func TestDowncasesPassThroughOnInvalidType(t *testing.T) {
 	spec := gspec.New(t)
-	filter := DowncaseFactory(nil)
+	filter := DowncaseFactory(nil, nil)
 	spec.Expect(filter(123, nil).(int)).ToEqual(123)
 }

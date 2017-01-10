@@ -1,13 +1,14 @@
 package filters
 
 import (
+	"context"
 	"reflect"
 
 	"github.com/acstech/liquid/core"
 )
 
 // Creates a reverse filter
-func ReverseFactory(parameters []core.Value) core.Filter {
+func ReverseFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	return Reverse
 }
 

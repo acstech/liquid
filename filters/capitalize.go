@@ -2,12 +2,13 @@ package filters
 
 import (
 	"bytes"
+	"context"
 
 	"github.com/acstech/liquid/core"
 )
 
 // Creates a capitalize filter
-func CapitalizeFactory(parameters []core.Value) core.Filter {
+func CapitalizeFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	return Capitalize
 }
 

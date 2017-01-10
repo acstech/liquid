@@ -1,11 +1,13 @@
 package filters
 
 import (
+	"context"
+
 	"github.com/acstech/liquid/core"
 )
 
 // Creates an append filter
-func AppendFactory(parameters []core.Value) core.Filter {
+func AppendFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	if len(parameters) == 0 {
 		return Noop
 	}

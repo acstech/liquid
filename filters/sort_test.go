@@ -8,7 +8,7 @@ import (
 
 func TestSortsAnArrayOfInteger(t *testing.T) {
 	spec := gspec.New(t)
-	filter := SortFactory(nil)
+	filter := SortFactory(nil, nil)
 	values := filter([]int{3, 4, 1, 2, 3}, nil).([]int)
 	spec.Expect(len(values)).ToEqual(5)
 	spec.Expect(values[0]).ToEqual(1)
@@ -20,7 +20,7 @@ func TestSortsAnArrayOfInteger(t *testing.T) {
 
 func TestSortsAnArrayOfStrings(t *testing.T) {
 	spec := gspec.New(t)
-	filter := SortFactory(nil)
+	filter := SortFactory(nil, nil)
 	values := filter([]string{"cc", "b", "aa", "g"}, nil).([]string)
 	spec.Expect(len(values)).ToEqual(4)
 	spec.Expect(values[0]).ToEqual("aa")
@@ -31,7 +31,7 @@ func TestSortsAnArrayOfStrings(t *testing.T) {
 
 func TestSortsAnArrayOfFloats(t *testing.T) {
 	spec := gspec.New(t)
-	filter := SortFactory(nil)
+	filter := SortFactory(nil, nil)
 	values := filter([]float64{1.1, 0.9, 1233.2, 21.994}, nil).([]float64)
 	spec.Expect(len(values)).ToEqual(4)
 	spec.Expect(values[0]).ToEqual(0.9)
@@ -42,7 +42,7 @@ func TestSortsAnArrayOfFloats(t *testing.T) {
 
 func TestSortsSortableData(t *testing.T) {
 	spec := gspec.New(t)
-	filter := SortFactory(nil)
+	filter := SortFactory(nil, nil)
 	values := filter(People{&Person{"Leto"}, &Person{"Paul"}, &Person{"Jessica"}}, nil).(People)
 	spec.Expect(len(values)).ToEqual(3)
 	spec.Expect(values[0].Name).ToEqual("Jessica")
@@ -52,7 +52,7 @@ func TestSortsSortableData(t *testing.T) {
 
 func TestSortsOtherValuesAsStrings(t *testing.T) {
 	spec := gspec.New(t)
-	filter := SortFactory(nil)
+	filter := SortFactory(nil, nil)
 	values := filter([]interface{}{933, "spice", true, 123.44, "123", false}, nil).([]interface{})
 	spec.Expect(len(values)).ToEqual(6)
 	spec.Expect(values[0].(string)).ToEqual("123")
@@ -65,7 +65,7 @@ func TestSortsOtherValuesAsStrings(t *testing.T) {
 
 func TestSortSkipsNonArrays(t *testing.T) {
 	spec := gspec.New(t)
-	filter := SortFactory(nil)
+	filter := SortFactory(nil, nil)
 	spec.Expect(filter(1343, nil).(int)).ToEqual(1343)
 }
 

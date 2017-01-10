@@ -1,6 +1,7 @@
 package filters
 
 import (
+	"context"
 	"reflect"
 	"sort"
 
@@ -8,7 +9,7 @@ import (
 )
 
 // Creates a sort filter
-func SortFactory(parameters []core.Value) core.Filter {
+func SortFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	return Sort
 }
 

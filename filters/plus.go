@@ -1,6 +1,7 @@
 package filters
 
 import (
+	"context"
 	"strconv"
 	"time"
 
@@ -10,7 +11,7 @@ import (
 var defaultPlus = (&IntPlusFilter{1}).Plus
 
 // Creates a plus filter
-func PlusFactory(parameters []core.Value) core.Filter {
+func PlusFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	if len(parameters) == 0 {
 		return defaultPlus
 	}

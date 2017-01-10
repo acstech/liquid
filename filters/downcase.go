@@ -2,13 +2,14 @@ package filters
 
 import (
 	"bytes"
+	"context"
 	"strings"
 
 	"github.com/acstech/liquid/core"
 )
 
 // Creates a downcase filter
-func DowncaseFactory(parameters []core.Value) core.Filter {
+func DowncaseFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	return Downcase
 }
 

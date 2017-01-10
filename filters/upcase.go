@@ -2,13 +2,14 @@ package filters
 
 import (
 	"bytes"
+	"context"
 	"strings"
 
 	"github.com/acstech/liquid/core"
 )
 
 // Creates a upcase filter
-func UpcaseFactory(parameters []core.Value) core.Filter {
+func UpcaseFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	return Upcase
 }
 

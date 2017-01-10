@@ -2,6 +2,7 @@ package filters
 
 import (
 	"bytes"
+	"context"
 	"reflect"
 
 	"github.com/acstech/liquid/core"
@@ -10,7 +11,7 @@ import (
 var defaultJoin = (&JoinFilter{&core.StaticStringValue{" "}}).Join
 
 // Creates a join filter
-func JoinFactory(parameters []core.Value) core.Filter {
+func JoinFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	if len(parameters) == 0 {
 		return defaultJoin
 	}

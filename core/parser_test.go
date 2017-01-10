@@ -1,6 +1,7 @@
 package core
 
 import (
+	"context"
 	"testing"
 
 	"github.com/karlseguin/gspec"
@@ -310,7 +311,7 @@ func TestParserReadsMultiplePartials(t *testing.T) {
 }
 
 func newParser(s string) *Parser {
-	return NewParser([]byte(s))
+	return NewParser(context.Background(), []byte(s))
 }
 
 func assertParsedConditionGroup(t *testing.T, group Verifiable, data ...interface{}) {

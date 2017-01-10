@@ -1,10 +1,12 @@
 package core
 
+import "context"
+
 // An interface function
 type Filter func(input interface{}, data map[string]interface{}) interface{}
 
 // A filter factory creates a filter based on the supplied parameters
-type FilterFactory func(parameters []Value) Filter
+type FilterFactory func(ctx context.Context, parameters []Value) Filter
 
 // A map of filter names to filter factories
 var FilterLookup = make(map[string]FilterFactory)

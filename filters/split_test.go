@@ -9,7 +9,7 @@ import (
 
 func TestSplitsAStringOnDefaultSpace(t *testing.T) {
 	spec := gspec.New(t)
-	filter := SplitFactory([]core.Value{})
+	filter := SplitFactory(nil, []core.Value{})
 	values := filter("hello world", nil).([]string)
 	spec.Expect(len(values)).ToEqual(2)
 	spec.Expect(values[0]).ToEqual("hello")
@@ -18,7 +18,7 @@ func TestSplitsAStringOnDefaultSpace(t *testing.T) {
 
 func TestSplitsAStringOnSpecifiedValue(t *testing.T) {
 	spec := gspec.New(t)
-	filter := SplitFactory([]core.Value{stringValue("..")})
+	filter := SplitFactory(nil, []core.Value{stringValue("..")})
 	values := filter([]byte("hel..lowo..rl..d"), nil).([]string)
 	spec.Expect(len(values)).ToEqual(4)
 	spec.Expect(values[0]).ToEqual("hel")
@@ -29,7 +29,7 @@ func TestSplitsAStringOnSpecifiedValue(t *testing.T) {
 
 func TestSplitsAStringOnADynamicValue(t *testing.T) {
 	spec := gspec.New(t)
-	filter := SplitFactory([]core.Value{dynamicValue("sep")})
+	filter := SplitFactory(nil, []core.Value{dynamicValue("sep")})
 	values := filter("over;9000;!", params("sep", ";")).([]string)
 	spec.Expect(len(values)).ToEqual(3)
 	spec.Expect(values[0]).ToEqual("over")

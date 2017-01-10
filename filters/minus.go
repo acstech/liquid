@@ -1,13 +1,15 @@
 package filters
 
 import (
+	"context"
+
 	"github.com/acstech/liquid/core"
 )
 
 var defaultMinus = (&IntPlusFilter{-1}).Plus
 
 // Creates a minus filter
-func MinusFactory(parameters []core.Value) core.Filter {
+func MinusFactory(ctx context.Context, parameters []core.Value) core.Filter {
 	if len(parameters) == 0 {
 		return defaultMinus
 	}
