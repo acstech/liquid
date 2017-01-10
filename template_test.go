@@ -282,12 +282,12 @@ var complexNestedCaseWithIfTemplate = `
 
 5`
 
-var nestedUnlessIfTemplate = `{% unless false %}{% if true %}foo{% endif %}{% endunless %}`
+var nestedUnlessIfTemplate = `{% unless false %}{% if true %}foo{% endif %}bar{% endunless %}`
 
 func TestTemplateRenderNestedIfInUnless(t *testing.T) {
 	d := map[string]interface{}{}
 	template, _ := ParseString(nestedUnlessIfTemplate, nil)
-	assertRender(t, template, d, "foo")
+	assertRender(t, template, d, "foobar")
 }
 
 func TestTemplateRenderNestedCaseAndIf(t *testing.T) {
