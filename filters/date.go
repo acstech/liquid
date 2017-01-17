@@ -26,6 +26,8 @@ var (
 // DateFactory creates an date filter
 func DateFactory(parameters []core.Value) core.Filter {
 	switch len(parameters) {
+	case 0:
+		return Noop
 	case 1:
 		return (&DateFilter{format: parameters[0]}).ToString
 	case 2:
@@ -33,19 +35,13 @@ func DateFactory(parameters []core.Value) core.Filter {
 		case *core.StaticIntValue, *core.StaticFloatValue:
 			return (&DateFilter{format: parameters[0], offset: parameters[1]}).ToString
 		}
-
 		return (&DateFilter{format: parameters[0], inputFormat: parameters[1]}).ToString
-
-	case 3:
+	default:
 		switch parameters[1].(type) {
 		case *core.StaticIntValue, *core.StaticFloatValue:
 			return (&DateFilter{format: parameters[0], offset: parameters[1], inputFormat: parameters[2]}).ToString
 		}
-
 		return (&DateFilter{format: parameters[0], inputFormat: parameters[1], offset: parameters[2]}).ToString
-
-	default:
-		return Noop
 	}
 }
 
