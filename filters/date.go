@@ -32,13 +32,13 @@ func DateFactory(parameters []core.Value) core.Filter {
 		return (&DateFilter{format: parameters[0]}).ToString
 	case 2:
 		switch parameters[1].(type) {
-		case *core.StaticIntValue, *core.StaticFloatValue:
+		case *core.StaticIntValue, *core.StaticFloatValue, *core.DynamicValue:
 			return (&DateFilter{format: parameters[0], offset: parameters[1]}).ToString
 		}
 		return (&DateFilter{format: parameters[0], inputFormat: parameters[1]}).ToString
 	default:
 		switch parameters[1].(type) {
-		case *core.StaticIntValue, *core.StaticFloatValue:
+		case *core.StaticIntValue, *core.StaticFloatValue, *core.DynamicValue:
 			return (&DateFilter{format: parameters[0], offset: parameters[1], inputFormat: parameters[2]}).ToString
 		}
 		return (&DateFilter{format: parameters[0], inputFormat: parameters[1], offset: parameters[2]}).ToString
@@ -54,7 +54,6 @@ type DateFilter struct {
 
 // ToString converts input to formatted date string
 func (d *DateFilter) ToString(input interface{}, data map[string]interface{}) interface{} {
-
 	inputFormat := ""
 	if d.inputFormat != nil {
 		inputFormat = core.ToString(d.inputFormat.Resolve(data))
@@ -90,14 +89,14 @@ func inputToTime(input interface{}, inputFormat string) (time.Time, bool) {
 		return timeFromString(string(typed), inputFormat)
 	}
 	if n, ok := core.ToInt(input); ok {
-		return core.Now().Add(time.Minute * time.Duration(n)), true
+		return core.Now().UTC().Add(time.Minute * time.Duration(n)), true
 	}
 	return zeroTime, false
 }
 
 func timeFromString(s, inputFormat string) (time.Time, bool) {
 	if s == "now" || s == "today" {
-		return core.Now(), true
+		return core.Now().UTC(), true
 	}
 
 	if inputFormat != "" {
