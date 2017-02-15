@@ -46,8 +46,11 @@ func TestIncludeTagWithExecutes(t *testing.T) {
 	testData["context"] = testContext
 
 	config := new(core.Configuration).IncludeHandler(func(name string, writer io.Writer, data map[string]interface{}) {
-		writer.Write([]byte(fmt.Sprintf("%v", data["key"])))
+		dataMap, ok := data["test"].(map[string]interface{})
+		spec.Expect(ok, true)
+		writer.Write([]byte(fmt.Sprintf("%v", dataMap["key"])))
 	})
+
 	tag, err := IncludeFactory(parser, config)
 
 	spec.Expect(err).ToBeNil()
@@ -107,7 +110,9 @@ func TestIncludeTagWithWithParametersExecutes(t *testing.T) {
 	testData["context"] = testContext
 
 	config := new(core.Configuration).IncludeHandler(func(name string, writer io.Writer, data map[string]interface{}) {
-		writer.Write([]byte(fmt.Sprintf("%v,%v,%v", data["key"], data["test1"], data["test2"])))
+		dataMap, ok := data["test"].(map[string]interface{})
+		spec.Expect(ok, true)
+		writer.Write([]byte(fmt.Sprintf("%v,%v,%v", dataMap["key"], data["test1"], data["test2"])))
 	})
 	tag, err := IncludeFactory(parser, config)
 
