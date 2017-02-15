@@ -101,36 +101,21 @@ func (i *Include) Execute(writer io.Writer, data map[string]interface{}) core.Ex
 		return core.Normal
 	}
 
-	template := core.ToString(i.includeName.Resolve(data))
-
 	// Resolve values for all our parameters
 	for key, value := range i.parameters {
 		data[key] = value.Resolve(data)
 	}
 
-	if i.scope != nil {
-		scope := i.scope.Resolve(data)
-
-		if i.scopeType == includeForScopeType {
-			// Resolve returns a byte array when resolved data is nil that we can't do
-			// anything with. Bail so we dont just iterate through an array of bytes.
-			if _, byteOk := scope.([]byte); !byteOk {
-
-				switch reflect.TypeOf(scope).Kind() {
-				case reflect.Slice:
-					s := reflect.ValueOf(scope)
-
-					for idx := 0; idx < s.Len(); idx++ {
-						data[i.scopeKey] = s.Index(idx).Interface()
-						i.handler(template, writer, data)
-					}
-				}
-
-				return core.Normal
-			}
+	if i.scopeType == includeForScopeType {
+		if c, ok := i.executeFor(writer, data); ok {
+			return c
 		}
+	}
 
-		data[i.scopeKey] = scope
+	template := core.ToString(i.includeName.Resolve(data))
+
+	if i.scope != nil {
+		data[i.scopeKey] = i.scope.Resolve(data)
 	}
 
 	i.handler(template, writer, data)
@@ -144,4 +129,35 @@ func (i *Include) Name() string {
 
 func (i *Include) Type() core.TagType {
 	return core.StandaloneTag
+}
+
+// executeFor returns false in any case that does not execute the template
+func (i *Include) executeFor(writer io.Writer, data map[string]interface{}) (core.ExecuteState, bool) {
+
+	if i.scope == nil {
+		return core.Normal, false
+	}
+
+	scope := i.scope.Resolve(data)
+
+	// Resolve returns a byte array when resolved data is nil that we can't do
+	// anything with. Bail so we dont just iterate through an array of bytes.
+	if _, byteOk := scope.([]byte); byteOk {
+		return core.Normal, false
+	}
+
+	template := core.ToString(i.includeName.Resolve(data))
+
+	switch reflect.TypeOf(scope).Kind() {
+	case reflect.Slice:
+		s := reflect.ValueOf(scope)
+		for idx := 0; idx < s.Len(); idx++ {
+			data[i.scopeKey] = s.Index(idx).Interface()
+			i.handler(template, writer, data)
+		}
+	default:
+		return core.Normal, false
+	}
+
+	return core.Normal, true
 }
