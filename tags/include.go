@@ -138,20 +138,6 @@ func (i *Include) Execute(writer io.Writer, data map[string]interface{}) core.Ex
 	return core.Normal
 }
 
-func toMap(data interface{}, contextVariableName string) map[string]interface{} {
-	if data == nil {
-		return nil
-	}
-
-	if typed, ok := data.(map[string]interface{}); ok {
-		return typed
-	}
-
-	context := make(map[string]interface{})
-	context[contextVariableName] = data
-	return context
-}
-
 func (i *Include) Name() string {
 	return "include"
 }
