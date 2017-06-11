@@ -115,6 +115,17 @@ func TestRendersCaseElse(t *testing.T) {
 	assertRender(t, template, nil, `A-else-Z`)
 }
 
+func TestRendersUnknownForAttribute(t *testing.T) {
+	template, err := ParseString("A-{% for item in array unknown %}{% endfor%}-Z", nil)
+	if template != nil {
+		t.Errorf("fail")
+	}
+	expected := "\"unknown\" is an unknown attribute in for tag"
+	if !strings.HasPrefix(err.Error(), expected) {
+		t.Errorf("Expecting %q..., got %q", expected, err)
+	}
+}
+
 var complexTemplate = `
 Out of
 {% for color in colors reverse %}

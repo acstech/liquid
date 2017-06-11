@@ -64,7 +64,7 @@ func ForFactory(p *core.Parser, config *core.Configuration) (core.Tag, error) {
 		} else if name == "reverse" {
 			f.reverse = true
 		} else {
-			return nil, p.Error(fmt.Sprint("%q is an inknown modifier in for tag", name))
+			return nil, p.Error(fmt.Sprintf("%q is an unknown attribute in for tag", name))
 		}
 	}
 	p.SkipPastTag()
