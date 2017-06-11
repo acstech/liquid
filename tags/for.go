@@ -61,12 +61,13 @@ func ForFactory(p *core.Parser, config *core.Configuration) (core.Tag, error) {
 				return nil, err
 			}
 			f.offset = offset
-		} else if name == "reverse" {
-			f.reverse = true
+		} else if name == "reversed" {
+			f.reversed = true
 		} else {
 			return nil, p.Error(fmt.Sprintf("%q is an unknown attribute in for tag", name))
 		}
 	}
+
 	p.SkipPastTag()
 	return f, nil
 }
@@ -80,7 +81,7 @@ type For struct {
 	name      string
 	keyName   string
 	valueName string
-	reverse   bool
+	reversed  bool
 	limit     core.Value
 	offset    core.Value
 	value     core.Value
@@ -152,7 +153,7 @@ func (f *For) Type() core.TagType {
 
 func (f *For) iterateArray(state *LoopState, value reflect.Value, isString bool) {
 	length := state.Length
-	if f.reverse {
+	if f.reversed {
 		for i := length - 1; i >= 0; i-- {
 			if state := f.iterateArrayIndex(i, state, value, isString); state == core.Break {
 				return
@@ -181,7 +182,7 @@ func (f *For) iterateArrayIndex(i int, state *LoopState, value reflect.Value, is
 func (f *For) iterateMap(state *LoopState, value reflect.Value) {
 	keys := value.MapKeys()
 	length := state.Length
-	if f.reverse {
+	if f.reversed {
 		for i := length - 1; i >= 0; i-- {
 			if state := f.iterateMapIndex(i, state, keys, value); state == core.Break {
 				return
@@ -207,7 +208,7 @@ func (f *For) iterateMapIndex(i int, state *LoopState, keys []reflect.Value, val
 
 func (f *For) loopIteration(state *LoopState, i int) {
 	l1 := state.Length - 1
-	if f.reverse {
+	if f.reversed {
 		state.Index = state.Length - i
 		state.Index0 = l1 - i
 		state.RIndex = i + 1

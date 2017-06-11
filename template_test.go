@@ -1,6 +1,7 @@
 package liquid
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/karlseguin/gspec"
@@ -115,6 +116,14 @@ func TestRendersCaseElse(t *testing.T) {
 	assertRender(t, template, nil, `A-else-Z`)
 }
 
+func TestRendersForReversed(t *testing.T) {
+	data := map[string]interface{}{
+		"array": []int{1, 2, 3},
+	}
+	template, _ := ParseString("A-{% for item in array reversed %}{{item}}{% endfor%}-Z", nil)
+	assertRender(t, template, data, `A-321-Z`)
+}
+
 func TestRendersUnknownForAttribute(t *testing.T) {
 	template, err := ParseString("A-{% for item in array unknown %}{% endfor%}-Z", nil)
 	if template != nil {
@@ -128,7 +137,7 @@ func TestRendersUnknownForAttribute(t *testing.T) {
 
 var complexTemplate = `
 Out of
-{% for color in colors reverse %}
+{% for color in colors reversed %}
 - {{ color}}
 {% endfor %}
 {% capture favorite %}{{ colors |first}}{%endcapture%}
