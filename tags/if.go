@@ -1,7 +1,6 @@
 package tags
 
 import (
-	"errors"
 	"fmt"
 	"io"
 
@@ -61,7 +60,7 @@ type If struct {
 func (i *If) AddSibling(tag core.Tag) error {
 	ifs, ok := tag.(IfSibling)
 	if ok == false {
-		return errors.New(fmt.Sprintf("%q does not belong inside of an if"))
+		return fmt.Errorf("%q does not belong inside of an if", tag.Name())
 	}
 	i.conditions = append(i.conditions, ifs)
 	i.lastSibling = tag

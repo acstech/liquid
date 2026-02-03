@@ -1,7 +1,6 @@
 package tags
 
 import (
-	"errors"
 	"fmt"
 	"io"
 
@@ -51,7 +50,7 @@ func (c *Case) AddCode(code core.Code) {}
 func (c *Case) AddSibling(tag core.Tag) error {
 	cs, ok := tag.(CaseSibling)
 	if ok == false {
-		return errors.New(fmt.Sprintf("%q does not belong inside of a case"))
+		return fmt.Errorf("%q does not belong inside of a case", tag.Name())
 	}
 	c.conditions = append(c.conditions, cs)
 	cs.AddLeftValue(c.value)

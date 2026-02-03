@@ -1,7 +1,6 @@
 package tags
 
 import (
-	"errors"
 	"fmt"
 	"io"
 
@@ -36,7 +35,7 @@ type Unless struct {
 func (u *Unless) AddSibling(tag core.Tag) error {
 	e, ok := tag.(*Else)
 	if ok == false {
-		return errors.New(fmt.Sprintf("%q does not belong as a sibling of an unless"))
+		return fmt.Errorf("%q does not belong as a sibling of an unless", tag.Name())
 	}
 	u.elseCondition = e
 	u.lastSibling = tag
