@@ -4,11 +4,10 @@ import (
 	"testing"
 
 	"github.com/acstech/liquid/core"
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestReplaceFirstValueInAString(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ReplaceFirstFactory([]core.Value{stringValue("foo"), stringValue("bar")})
-	spec.Expect(filter("foobarforfoo", nil).(string)).ToEqual("barbarforfoo")
+	assert.Equal(t, filter("foobarforfoo", nil).(string), "barbarforfoo")
 }

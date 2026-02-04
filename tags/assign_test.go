@@ -5,7 +5,7 @@ import (
 
 	"github.com/acstech/liquid/core"
 	"github.com/acstech/liquid/filters"
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func init() {
@@ -13,17 +13,15 @@ func init() {
 }
 
 func TestAssignForAStaticAndNoFilters(t *testing.T) {
-	spec := gspec.New(t)
 	parser := newParser(" var = 'abc123'%}B")
 	assertStringAssign(t, parser, "var", "abc123")
-	spec.Expect(parser.Current()).ToEqual(byte('B'))
+	assert.Equal(t, parser.Current(), byte('B'))
 }
 
 func TestAssignForAStaticWithFilters(t *testing.T) {
-	spec := gspec.New(t)
 	parser := newParser("sale  =  213  |minus: 4  %}o")
 	assertIntAssign(t, parser, "sale", 209)
-	spec.Expect(parser.Current()).ToEqual(byte('o'))
+	assert.Equal(t, parser.Current(), byte('o'))
 }
 
 func TestAssignForAVariableWithFilters(t *testing.T) {
@@ -32,23 +30,21 @@ func TestAssignForAVariableWithFilters(t *testing.T) {
 }
 
 func assertStringAssign(t *testing.T, parser *core.Parser, variableName, value string) {
-	spec := gspec.New(t)
 	tag, err := AssignFactory(parser, nil)
-	spec.Expect(err).ToBeNil()
-	spec.Expect(tag.Name()).ToEqual("assign")
+	assert.Nil(t, err)
+	assert.Equal(t, tag.Name(), "assign")
 	m := make(map[string]interface{})
 	tag.Execute(nil, m)
-	spec.Expect(m[variableName].(string)).ToEqual(value)
+	assert.Equal(t, m[variableName].(string), value)
 }
 
 func assertIntAssign(t *testing.T, parser *core.Parser, variableName string, value int) {
-	spec := gspec.New(t)
 	tag, err := AssignFactory(parser, nil)
-	spec.Expect(err).ToBeNil()
-	spec.Expect(tag.Name()).ToEqual("assign")
+	assert.Nil(t, err)
+	assert.Equal(t, tag.Name(), "assign")
 	m := map[string]interface{}{
 		"price": 100,
 	}
 	tag.Execute(nil, m)
-	spec.Expect(m[variableName].(int)).ToEqual(value)
+	assert.Equal(t, m[variableName].(int), value)
 }

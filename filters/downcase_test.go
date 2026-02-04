@@ -3,23 +3,20 @@ package filters
 import (
 	"testing"
 
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDowncasesAString(t *testing.T) {
-	spec := gspec.New(t)
 	filter := DowncaseFactory(nil)
-	spec.Expect(filter("DBZ", nil).(string)).ToEqual("dbz")
+	assert.Equal(t, filter("DBZ", nil).(string), "dbz")
 }
 
 func TestDowncasesBytes(t *testing.T) {
-	spec := gspec.New(t)
 	filter := DowncaseFactory(nil)
-	spec.Expect(string(filter([]byte("DBZ"), nil).([]byte))).ToEqual("dbz")
+	assert.Equal(t, string(filter([]byte("DBZ"), nil).([]byte)), "dbz")
 }
 
 func TestDowncasesPassThroughOnInvalidType(t *testing.T) {
-	spec := gspec.New(t)
 	filter := DowncaseFactory(nil)
-	spec.Expect(filter(123, nil).(int)).ToEqual(123)
+	assert.Equal(t, filter(123, nil).(int), 123)
 }

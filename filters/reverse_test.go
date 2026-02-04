@@ -3,58 +3,51 @@ package filters
 import (
 	"testing"
 
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestReverseDoesNothingOnInvalidType(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ReverseFactory(nil)
-	spec.Expect(filter(123, nil).(int)).ToEqual(123)
+	assert.Equal(t, filter(123, nil).(int), 123)
 }
 
 func TestReverseAnEvenLengthString(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ReverseFactory(nil)
-	spec.Expect(string(filter("123456", nil).([]byte))).ToEqual("654321")
+	assert.Equal(t, string(filter("123456", nil).([]byte)), "654321")
 }
 
 func TestReverseAnOddLengthString(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ReverseFactory(nil)
-	spec.Expect(string(filter("12345", nil).([]byte))).ToEqual("54321")
+	assert.Equal(t, string(filter("12345", nil).([]byte)), "54321")
 }
 
 func TestReverseASingleCharacterString(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ReverseFactory(nil)
-	spec.Expect(string(filter("1", nil).([]byte))).ToEqual("1")
+	assert.Equal(t, string(filter("1", nil).([]byte)), "1")
 }
 
 func TestReverseAnEvenLengthArray(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ReverseFactory(nil)
 	values := filter([]int{1, 2, 3, 4}, nil).([]int)
-	spec.Expect(len(values)).ToEqual(4)
-	spec.Expect(values[0]).ToEqual(4)
-	spec.Expect(values[1]).ToEqual(3)
-	spec.Expect(values[2]).ToEqual(2)
-	spec.Expect(values[3]).ToEqual(1)
+	assert.Equal(t, len(values), 4)
+	assert.Equal(t, values[0], 4)
+	assert.Equal(t, values[1], 3)
+	assert.Equal(t, values[2], 2)
+	assert.Equal(t, values[3], 1)
 }
 
 func TestReverseAnOddLengthArray(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ReverseFactory(nil)
 	values := filter([]float64{1.1, 2.2, 3.3}, nil).([]float64)
-	spec.Expect(len(values)).ToEqual(3)
-	spec.Expect(values[0]).ToEqual(3.3)
-	spec.Expect(values[1]).ToEqual(2.2)
-	spec.Expect(values[2]).ToEqual(1.1)
+	assert.Equal(t, len(values), 3)
+	assert.Equal(t, values[0], 3.3)
+	assert.Equal(t, values[1], 2.2)
+	assert.Equal(t, values[2], 1.1)
 }
 
 func TestReverseASingleElementArray(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ReverseFactory(nil)
 	values := filter([]bool{true}, nil).([]bool)
-	spec.Expect(len(values)).ToEqual(1)
-	spec.Expect(values[0]).ToEqual(true)
+	assert.Equal(t, len(values), 1)
+	assert.Equal(t, values[0], true)
 }

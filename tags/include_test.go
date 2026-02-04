@@ -7,20 +7,18 @@ import (
 	"testing"
 
 	"github.com/acstech/liquid/core"
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestIncludeFactory(t *testing.T) {
-	spec := gspec.New(t)
 	parser := newParser("'test' %}Z")
 	tag, err := IncludeFactory(parser, new(core.Configuration))
-	spec.Expect(err).ToBeNil()
-	spec.Expect(tag.Name()).ToEqual("include")
-	spec.Expect(parser.Current()).ToEqual(byte('Z'))
+	assert.Nil(t, err)
+	assert.Equal(t, tag.Name(), "include")
+	assert.Equal(t, parser.Current(), byte('Z'))
 }
 
 func TestIncludeTagExecutes(t *testing.T) {
-	spec := gspec.New(t)
 	parser := newParser("'test' %}")
 	testData := make(map[string]interface{})
 	testData["key"] = "test"
@@ -30,15 +28,14 @@ func TestIncludeTagExecutes(t *testing.T) {
 	})
 	tag, err := IncludeFactory(parser, config)
 
-	spec.Expect(err).ToBeNil()
+	assert.Nil(t, err)
 
 	writer := new(bytes.Buffer)
 	tag.Execute(writer, testData)
-	spec.Expect(writer.String()).ToEqual(testData["key"])
+	assert.Equal(t, writer.String(), testData["key"])
 }
 
 func TestIncludeTagWithExecutes(t *testing.T) {
-	spec := gspec.New(t)
 	parser := newParser("'test' with context %}")
 	testData := make(map[string]interface{})
 	testContext := make(map[string]interface{})
@@ -47,21 +44,20 @@ func TestIncludeTagWithExecutes(t *testing.T) {
 
 	config := new(core.Configuration).IncludeHandler(func(name string, writer io.Writer, data map[string]interface{}) {
 		dataMap, ok := data["test"].(map[string]interface{})
-		spec.Expect(ok, true)
+		assert.Equal(t, ok, true)
 		writer.Write([]byte(fmt.Sprintf("%v", dataMap["key"])))
 	})
 
 	tag, err := IncludeFactory(parser, config)
 
-	spec.Expect(err).ToBeNil()
+	assert.Nil(t, err)
 
 	writer := new(bytes.Buffer)
 	tag.Execute(writer, testData)
-	spec.Expect(writer.String()).ToEqual(testContext["key"])
+	assert.Equal(t, writer.String(), testContext["key"])
 }
 
 func TestIncludeTagForExecutes(t *testing.T) {
-	spec := gspec.New(t)
 	parser := newParser("'test' for context %}")
 
 	testData := make(map[string]interface{})
@@ -76,15 +72,14 @@ func TestIncludeTagForExecutes(t *testing.T) {
 	})
 	tag, err := IncludeFactory(parser, config)
 
-	spec.Expect(err).ToBeNil()
+	assert.Nil(t, err)
 
 	writer := new(bytes.Buffer)
 	tag.Execute(writer, testData)
-	spec.Expect(writer.String()).ToEqual("123")
+	assert.Equal(t, writer.String(), "123")
 }
 
 func TestIncludeTagWithParameters(t *testing.T) {
-	spec := gspec.New(t)
 	parser := newParser("'test', test1:'A', test2:'B' %}")
 	testData := make(map[string]interface{})
 	testData["key"] = "test"
@@ -94,15 +89,14 @@ func TestIncludeTagWithParameters(t *testing.T) {
 	})
 	tag, err := IncludeFactory(parser, config)
 
-	spec.Expect(err).ToBeNil()
+	assert.Nil(t, err)
 
 	writer := new(bytes.Buffer)
 	tag.Execute(writer, testData)
-	spec.Expect(writer.String()).ToEqual("test,A,B")
+	assert.Equal(t, writer.String(), "test,A,B")
 }
 
 func TestIncludeTagWithWithParametersExecutes(t *testing.T) {
-	spec := gspec.New(t)
 	parser := newParser("'test' with context, test1: 'A', test2: 'B' %}")
 	testData := make(map[string]interface{})
 	testContext := make(map[string]interface{})
@@ -111,14 +105,14 @@ func TestIncludeTagWithWithParametersExecutes(t *testing.T) {
 
 	config := new(core.Configuration).IncludeHandler(func(name string, writer io.Writer, data map[string]interface{}) {
 		dataMap, ok := data["test"].(map[string]interface{})
-		spec.Expect(ok, true)
+		assert.Equal(t, ok, true)
 		writer.Write([]byte(fmt.Sprintf("%v,%v,%v", dataMap["key"], data["test1"], data["test2"])))
 	})
 	tag, err := IncludeFactory(parser, config)
 
-	spec.Expect(err).ToBeNil()
+	assert.Nil(t, err)
 
 	writer := new(bytes.Buffer)
 	tag.Execute(writer, testData)
-	spec.Expect(writer.String()).ToEqual("test,A,B")
+	assert.Equal(t, writer.String(), "test,A,B")
 }
