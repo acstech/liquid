@@ -4,8 +4,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/acstech/go-strftime"
 	"github.com/acstech/liquid/core"
+	"github.com/acstech/liquid/strftime"
 )
 
 var (
