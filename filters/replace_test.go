@@ -4,17 +4,15 @@ import (
 	"testing"
 
 	"github.com/acstech/liquid/core"
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestReplaceValuesInAString(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ReplaceFactory([]core.Value{stringValue("foo"), stringValue("bar")})
-	spec.Expect(filter("foobarforfoo", nil).(string)).ToEqual("barbarforbar")
+	assert.Equal(t, filter("foobarforfoo", nil).(string), "barbarforbar")
 }
 
 func TestReplaceWithDynamicValues(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ReplaceFactory([]core.Value{dynamicValue("f"), dynamicValue("b")})
-	spec.Expect(filter("foobarforfoo", params("f", "oo", "b", "br")).(string)).ToEqual("fbrbarforfbr")
+	assert.Equal(t, filter("foobarforfoo", params("f", "oo", "b", "br")).(string), "fbrbarforfbr")
 }

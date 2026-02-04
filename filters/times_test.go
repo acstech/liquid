@@ -5,79 +5,67 @@ import (
 	"testing"
 
 	"github.com/acstech/liquid/core"
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTimesAnIntToAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := TimesFactory([]core.Value{intValue(5)})
-	spec.Expect(filter(43, nil).(int)).ToEqual(215)
+	assert.Equal(t, filter(43, nil).(int), 215)
 }
 
 func TestTimesAnIntToAFloat(t *testing.T) {
-	spec := gspec.New(t)
 	filter := TimesFactory([]core.Value{intValue(2)})
-	spec.Expect(filter(43.3, nil).(float64)).ToEqual(86.6)
+	assert.Equal(t, filter(43.3, nil).(float64), 86.6)
 }
 
 func TestTimesAnIntToAStringAsAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := TimesFactory([]core.Value{intValue(7)})
-	spec.Expect(filter("33", nil).(int)).ToEqual(231)
+	assert.Equal(t, filter("33", nil).(int), 231)
 }
 
 func TestTimesAnIntToBytesAsAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := TimesFactory([]core.Value{intValue(7)})
-	spec.Expect(filter([]byte("34"), nil).(int)).ToEqual(238)
+	assert.Equal(t, filter([]byte("34"), nil).(int), 238)
 }
 
 func TestTimesAnIntToAStringAsAString(t *testing.T) {
-	spec := gspec.New(t)
 	filter := TimesFactory([]core.Value{intValue(7)})
-	spec.Expect(filter("abc", nil).(string)).ToEqual("abc")
+	assert.Equal(t, filter("abc", nil).(string), "abc")
 }
 
 func TestTimesAnIntToBytesAsAString(t *testing.T) {
-	spec := gspec.New(t)
 	filter := TimesFactory([]core.Value{intValue(8)})
-	spec.Expect(filter([]byte("abb"), nil).(string)).ToEqual("abb")
+	assert.Equal(t, filter([]byte("abb"), nil).(string), "abb")
 }
 
 func TestTimesAFloatToAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := TimesFactory([]core.Value{floatValue(1.10)})
-	spec.Expect(filter(43, nil).(float64)).ToEqual(47.300000000000004)
+	assert.Equal(t, filter(43, nil).(float64), 47.300000000000004)
 }
 
 func TestTimesAFloatToAFloat(t *testing.T) {
-	spec := gspec.New(t)
 	filter := TimesFactory([]core.Value{floatValue(5.3)})
-	spec.Expect(filter(43.3, nil).(float64)).ToEqual(229.48999999999998)
+	assert.Equal(t, filter(43.3, nil).(float64), 229.48999999999998)
 }
 
 func TestTimesAFloatToAStringAsAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := TimesFactory([]core.Value{floatValue(7.11)})
-	spec.Expect(filter("33", nil).(float64)).ToEqual(234.63000000000002)
+	assert.Equal(t, filter("33", nil).(float64), 234.63000000000002)
 }
 
 func TestTimesADynamicIntValue(t *testing.T) {
-	spec := gspec.New(t)
 	filter := TimesFactory([]core.Value{dynamicValue("count")})
-	spec.Expect(filter("33", params("count", 112)).(int)).ToEqual(3696)
+	assert.Equal(t, filter("33", params("count", 112)).(int), 3696)
 }
 
 func TestTimesADynamicFloatValue(t *testing.T) {
-	spec := gspec.New(t)
 	filter := TimesFactory([]core.Value{dynamicValue("count")})
-	spec.Expect(filter("12", params("count", 44.2)).(float64)).ToEqual(530.4000000000001)
+	assert.Equal(t, filter("12", params("count", 44.2)).(float64), 530.4000000000001)
 }
 
 func TestTimesDynamicNoop(t *testing.T) {
-	spec := gspec.New(t)
 	filter := TimesFactory([]core.Value{dynamicValue("count")})
-	spec.Expect(filter("12", params("count", "22")).(string)).ToEqual("12")
+	assert.Equal(t, filter("12", params("count", "22")).(string), "12")
 }
 
 func stringValue(s string) core.Value {

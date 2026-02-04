@@ -5,66 +5,56 @@ import (
 	"time"
 
 	"github.com/acstech/liquid/core"
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPlusAnIntToAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := PlusFactory([]core.Value{intValue(5)})
-	spec.Expect(filter(43, nil).(int)).ToEqual(48)
+	assert.Equal(t, filter(43, nil).(int), 48)
 }
 
 func TestPlusAFloattToAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := PlusFactory([]core.Value{floatValue(5.11)})
-	spec.Expect(filter(43, nil).(float64)).ToEqual(48.11)
+	assert.Equal(t, filter(43, nil).(float64), 48.11)
 }
 
 func TestPlusAnIntToAFloat(t *testing.T) {
-	spec := gspec.New(t)
 	filter := PlusFactory([]core.Value{intValue(5)})
-	spec.Expect(filter(43.2, nil).(float64)).ToEqual(48.2)
+	assert.Equal(t, filter(43.2, nil).(float64), 48.2)
 }
 
 func TestPlusAnIntToNow(t *testing.T) {
-	spec := gspec.New(t)
 	filter := PlusFactory([]core.Value{intValue(61)})
-	spec.Expect(filter("now", nil).(time.Time)).ToEqual(core.Now().Add(time.Minute * 61))
+	assert.Equal(t, filter("now", nil).(time.Time), core.Now().Add(time.Minute*61))
 }
 
 func TestPlusAnIntToATime(t *testing.T) {
-	spec := gspec.New(t)
 	now := time.Now()
 	filter := PlusFactory([]core.Value{intValue(7)})
-	spec.Expect(filter(now, nil).(time.Time)).ToEqual(now.Add(time.Minute * 7))
+	assert.Equal(t, filter(now, nil).(time.Time), now.Add(time.Minute*7))
 }
 
 func TestPlusAnIntToAStringAsAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := PlusFactory([]core.Value{intValue(7)})
-	spec.Expect(filter("33", nil).(int)).ToEqual(40)
+	assert.Equal(t, filter("33", nil).(int), 40)
 }
 
 func TestPlusAnIntToAStringAsAFloat(t *testing.T) {
-	spec := gspec.New(t)
 	filter := PlusFactory([]core.Value{floatValue(2.2)})
-	spec.Expect(filter("33.11", nil).(float64)).ToEqual(35.31)
+	assert.Equal(t, filter("33.11", nil).(float64), 35.31)
 }
 
 func TestPlusAnIntToBytesAsAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := PlusFactory([]core.Value{intValue(7)})
-	spec.Expect(filter([]byte("34"), nil).(int)).ToEqual(41)
+	assert.Equal(t, filter([]byte("34"), nil).(int), 41)
 }
 
 func TestPlusAnDynamicIntToBytesAsAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := PlusFactory([]core.Value{dynamicValue("fee")})
-	spec.Expect(filter([]byte("34"), params("fee", 5)).(int)).ToEqual(39)
+	assert.Equal(t, filter([]byte("34"), params("fee", 5)).(int), 39)
 }
 
 func TestPlusAnDynamicFloatToBytesAsAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := PlusFactory([]core.Value{dynamicValue("fee")})
-	spec.Expect(filter([]byte("34"), params("fee", 5.1)).(float64)).ToEqual(39.1)
+	assert.Equal(t, filter([]byte("34"), params("fee", 5.1)).(float64), 39.1)
 }

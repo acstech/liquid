@@ -3,22 +3,19 @@ package core
 import (
 	"testing"
 
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSkipSpaceHandlesValueWithOnlySpaces(t *testing.T) {
-	spec := gspec.New(t)
-	spec.Expect(SkipSpaces([]byte("    "))).ToEqual(-1)
+	assert.Equal(t, SkipSpaces([]byte("    ")), -1)
 }
 
 func TestSkipSpaceReturnsTheIndexOfTheFirstNonSpace(t *testing.T) {
-	spec := gspec.New(t)
-	spec.Expect(SkipSpaces([]byte("   over 9000"))).ToEqual(3)
+	assert.Equal(t, SkipSpaces([]byte("   over 9000")), 3)
 }
 
 func TestSkipSpaceWithNoSpaces(t *testing.T) {
-	spec := gspec.New(t)
-	spec.Expect(SkipSpaces([]byte("over 9000"))).ToEqual(0)
+	assert.Equal(t, SkipSpaces([]byte("over 9000")), 0)
 }
 
 func TestTrimSringArrayWhenCapIsLen(t *testing.T) {
@@ -65,11 +62,10 @@ func TestToBytesForANoneStringer(t *testing.T) {
 }
 
 func assertStringArray(t *testing.T, actuals []string, expected ...string) {
-	spec := gspec.New(t)
-	spec.Expect(len(actuals)).ToEqual(cap(actuals))
-	spec.Expect(len(actuals)).ToEqual(len(expected))
+	assert.Equal(t, len(actuals), cap(actuals))
+	assert.Equal(t, len(actuals), len(expected))
 	for i, a := range actuals {
-		spec.Expect(a).ToEqual(expected[i])
+		assert.Equal(t, a, expected[i])
 	}
 }
 

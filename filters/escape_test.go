@@ -3,11 +3,10 @@ package filters
 import (
 	"testing"
 
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEscapesAString(t *testing.T) {
-	spec := gspec.New(t)
 	filter := EscapeFactory(nil)
-	spec.Expect(filter("<script>hack</script>", nil).(string)).ToEqual("&lt;script&gt;hack&lt;/script&gt;")
+	assert.Equal(t, filter("<script>hack</script>", nil).(string), "&lt;script&gt;hack&lt;/script&gt;")
 }

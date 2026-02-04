@@ -3,37 +3,32 @@ package core
 import (
 	"testing"
 
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestResolvesAnInvalidValueFromNil(t *testing.T) {
-	spec := gspec.New(t)
-	spec.Expect(Resolve(nil, "something")).ToBeNil()
+	assert.Nil(t, Resolve(nil, "something"))
 }
 
 func TestResolvesAnInvalidValueFromAMap(t *testing.T) {
-	spec := gspec.New(t)
 	m := map[string]string{"name": "leto"}
-	spec.Expect(Resolve(m, "age")).ToEqual("")
+	assert.Equal(t, Resolve(m, "age"), "")
 }
 
 func TestResolvesAnInvalidValueFromAStruct(t *testing.T) {
-	spec := gspec.New(t)
 	m := &Person{"Leto", 3231}
-	spec.Expect(Resolve(m, "IsGholas")).ToBeNil()
+	assert.Nil(t, Resolve(m, "IsGholas"))
 }
 
 func TestResolvesAValueFromAMap(t *testing.T) {
-	spec := gspec.New(t)
 	m := map[string]string{"name": "leto"}
-	spec.Expect(Resolve(m, "name")).ToEqual("leto")
+	assert.Equal(t, Resolve(m, "name"), "leto")
 }
 
 func TestResolvesAValueFromAStruct(t *testing.T) {
-	spec := gspec.New(t)
 	m := &Person{"Leto", 3231}
-	spec.Expect(Resolve(m, "name")).ToEqual("Leto")
-	spec.Expect(Resolve(m, "age")).ToEqual(3231)
+	assert.Equal(t, Resolve(m, "name"), "Leto")
+	assert.Equal(t, Resolve(m, "age"), 3231)
 }
 
 type Person struct {

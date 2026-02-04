@@ -4,28 +4,25 @@ import (
 	"testing"
 
 	"github.com/acstech/liquid/core"
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPrependToAString(t *testing.T) {
-	spec := gspec.New(t)
 	filter := PrependFactory([]core.Value{stringValue("?!")})
-	spec.Expect(filter("dbz", nil).(string)).ToEqual("?!dbz")
+	assert.Equal(t, filter("dbz", nil).(string), "?!dbz")
 }
 
 func TestPrependToBytes(t *testing.T) {
-	spec := gspec.New(t)
 	filter := PrependFactory([]core.Value{stringValue("boring")})
-	spec.Expect(filter([]byte("so"), nil).(string)).ToEqual("boringso")
+	assert.Equal(t, filter([]byte("so"), nil).(string), "boringso")
 }
 
 func TestPrependADynamicValue(t *testing.T) {
-	spec := gspec.New(t)
 	filter := PrependFactory([]core.Value{dynamicValue("local.currency")})
 	data := map[string]interface{}{
 		"local": map[string]string{
 			"currency": "$",
 		},
 	}
-	spec.Expect(filter("100", data).(string)).ToEqual("$100")
+	assert.Equal(t, filter("100", data).(string), "$100")
 }

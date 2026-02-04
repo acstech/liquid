@@ -4,23 +4,20 @@ import (
 	"testing"
 
 	"github.com/acstech/liquid/core"
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDefaultWithBuiltinValue(t *testing.T) {
-	spec := gspec.New(t)
 	filter := DefaultFactory(nil)
-	spec.Expect(filter(nil, nil).(string)).ToEqual("")
+	assert.Equal(t, filter(nil, nil).(string), "")
 }
 
 func TestDefaultWithValueOnString(t *testing.T) {
-	spec := gspec.New(t)
 	filter := DefaultFactory([]core.Value{stringValue("d")})
-	spec.Expect(filter("", nil).(string)).ToEqual("d")
+	assert.Equal(t, filter("", nil), "d")
 }
 
 func TestDefaultWithValueOnArray(t *testing.T) {
-	spec := gspec.New(t)
 	filter := DefaultFactory([]core.Value{stringValue("n/a")})
-	spec.Expect(filter([]int{}, nil).(string)).ToEqual("n/a")
+	assert.Equal(t, filter([]int{}, nil), "n/a")
 }

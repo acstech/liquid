@@ -3,11 +3,10 @@ package filters
 import (
 	"testing"
 
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestReplacesNewlinesWithBr(t *testing.T) {
-	spec := gspec.New(t)
 	filter := NewLineToBrFactory(nil)
-	spec.Expect(filter("f\no\ro\n\r", nil).(string)).ToEqual("f<br />\no<br />\no<br />\n")
+	assert.Equal(t, filter("f\no\ro\n\r", nil).(string), "f<br />\no<br />\no<br />\n")
 }
