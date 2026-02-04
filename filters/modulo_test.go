@@ -4,35 +4,30 @@ import (
 	"testing"
 
 	"github.com/acstech/liquid/core"
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestModuloAnIntToAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ModuloFactory([]core.Value{intValue(5)})
-	spec.Expect(filter(43, nil).(int)).ToEqual(3)
+	assert.Equal(t, filter(43, nil).(int), 3)
 }
 
 func TestModuloAnFloatToAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ModuloFactory([]core.Value{floatValue(5.2)})
-	spec.Expect(filter(43, nil).(int)).ToEqual(3)
+	assert.Equal(t, filter(43, nil).(int), 3)
 }
 
 func TestModuloAnIntToAStringAsAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ModuloFactory([]core.Value{intValue(7)})
-	spec.Expect(filter("33", nil).(int)).ToEqual(5)
+	assert.Equal(t, filter("33", nil).(int), 5)
 }
 
 func TestModuloAnIntToBytesAsAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ModuloFactory([]core.Value{intValue(7)})
-	spec.Expect(filter([]byte("34"), nil).(int)).ToEqual(6)
+	assert.Equal(t, filter([]byte("34"), nil).(int), 6)
 }
 
 func TestModuloAnDynamicIntToBytesAsAnInt(t *testing.T) {
-	spec := gspec.New(t)
 	filter := ModuloFactory([]core.Value{dynamicValue("fee")})
-	spec.Expect(filter([]byte("34"), params("fee", 5)).(int)).ToEqual(4)
+	assert.Equal(t, filter([]byte("34"), params("fee", 5)).(int), 4)
 }

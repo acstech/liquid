@@ -53,8 +53,10 @@ func Resolve(data interface{}, field string) interface{} {
 }
 
 // This is necessary in the case where the value references a struct directly:
-//  template := "{{ user }}""
-//  data := map[string]interface{}{"user": &User{"Leto"}},
+//
+//	template := "{{ user }}""
+//	data := map[string]interface{}{"user": &User{"Leto"}},
+//
 // Without this step, the above would result in a value which points to the User
 // we need to resolve this a step further and get the value of "User" (which
 // will either me the output of its String() method, or %v)
@@ -111,7 +113,7 @@ func buildTypeData(value reflect.Value) map[string]int {
 	return typeData
 }
 
-//gets the length of string, map or array
+// gets the length of string, map or array
 func ToLength(input interface{}) (int, bool) {
 	if s, ok := input.(string); ok {
 		return len(s), true

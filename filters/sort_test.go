@@ -3,70 +3,64 @@ package filters
 import (
 	"testing"
 
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSortsAnArrayOfInteger(t *testing.T) {
-	spec := gspec.New(t)
 	filter := SortFactory(nil)
 	values := filter([]int{3, 4, 1, 2, 3}, nil).([]int)
-	spec.Expect(len(values)).ToEqual(5)
-	spec.Expect(values[0]).ToEqual(1)
-	spec.Expect(values[1]).ToEqual(2)
-	spec.Expect(values[2]).ToEqual(3)
-	spec.Expect(values[3]).ToEqual(3)
-	spec.Expect(values[4]).ToEqual(4)
+	assert.Equal(t, len(values), 5)
+	assert.Equal(t, values[0], 1)
+	assert.Equal(t, values[1], 2)
+	assert.Equal(t, values[2], 3)
+	assert.Equal(t, values[3], 3)
+	assert.Equal(t, values[4], 4)
 }
 
 func TestSortsAnArrayOfStrings(t *testing.T) {
-	spec := gspec.New(t)
 	filter := SortFactory(nil)
 	values := filter([]string{"cc", "b", "aa", "g"}, nil).([]string)
-	spec.Expect(len(values)).ToEqual(4)
-	spec.Expect(values[0]).ToEqual("aa")
-	spec.Expect(values[1]).ToEqual("b")
-	spec.Expect(values[2]).ToEqual("cc")
-	spec.Expect(values[3]).ToEqual("g")
+	assert.Equal(t, len(values), 4)
+	assert.Equal(t, values[0], "aa")
+	assert.Equal(t, values[1], "b")
+	assert.Equal(t, values[2], "cc")
+	assert.Equal(t, values[3], "g")
 }
 
 func TestSortsAnArrayOfFloats(t *testing.T) {
-	spec := gspec.New(t)
 	filter := SortFactory(nil)
 	values := filter([]float64{1.1, 0.9, 1233.2, 21.994}, nil).([]float64)
-	spec.Expect(len(values)).ToEqual(4)
-	spec.Expect(values[0]).ToEqual(0.9)
-	spec.Expect(values[1]).ToEqual(1.1)
-	spec.Expect(values[2]).ToEqual(21.994)
-	spec.Expect(values[3]).ToEqual(1233.2)
+	assert.Equal(t, len(values), 4)
+	assert.Equal(t, values[0], 0.9)
+	assert.Equal(t, values[1], 1.1)
+	assert.Equal(t, values[2], 21.994)
+	assert.Equal(t, values[3], 1233.2)
 }
 
 func TestSortsSortableData(t *testing.T) {
-	spec := gspec.New(t)
 	filter := SortFactory(nil)
 	values := filter(People{&Person{"Leto"}, &Person{"Paul"}, &Person{"Jessica"}}, nil).(People)
-	spec.Expect(len(values)).ToEqual(3)
-	spec.Expect(values[0].Name).ToEqual("Jessica")
-	spec.Expect(values[1].Name).ToEqual("Leto")
-	spec.Expect(values[2].Name).ToEqual("Paul")
+	assert.Equal(t, len(values), 3)
+	assert.Equal(t, values[0].Name, "Jessica")
+	assert.Equal(t, values[1].Name, "Leto")
+	assert.Equal(t, values[2].Name, "Paul")
 }
 
 func TestSortsOtherValuesAsStrings(t *testing.T) {
-	spec := gspec.New(t)
 	filter := SortFactory(nil)
 	values := filter([]interface{}{933, "spice", true, 123.44, "123", false}, nil).([]interface{})
-	spec.Expect(len(values)).ToEqual(6)
-	spec.Expect(values[0].(string)).ToEqual("123")
-	spec.Expect(values[1].(float64)).ToEqual(123.44)
-	spec.Expect(values[2].(int)).ToEqual(933)
-	spec.Expect(values[3].(bool)).ToEqual(false)
-	spec.Expect(values[4].(string)).ToEqual("spice")
-	spec.Expect(values[5].(bool)).ToEqual(true)
+	assert.Equal(t, len(values), 6)
+	assert.Equal(t, values[0].(string), "123")
+	assert.Equal(t, values[1].(float64), 123.44)
+	assert.Equal(t, values[2].(int), 933)
+	assert.Equal(t, values[3].(bool), false)
+	assert.Equal(t, values[4].(string), "spice")
+	assert.Equal(t, values[5].(bool), true)
 }
 
 func TestSortSkipsNonArrays(t *testing.T) {
-	spec := gspec.New(t)
 	filter := SortFactory(nil)
-	spec.Expect(filter(1343, nil).(int)).ToEqual(1343)
+	assert.Equal(t, filter(1343, nil).(int), 1343)
 }
 
 type People []*Person

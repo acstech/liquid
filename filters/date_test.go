@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/acstech/liquid/core"
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func init() {
@@ -16,27 +16,23 @@ func init() {
 }
 
 func TestDateNowWithBasicFormat(t *testing.T) {
-	spec := gspec.New(t)
 	filter := DateFactory([]core.Value{stringValue("%Y %m %d")})
-	spec.Expect(filter("now", nil).(string)).ToEqual("2006 01 02")
+	assert.Equal(t, filter("now", nil).(string), "2006 01 02")
 }
 
 func TestDateTodayWithBasicFormat(t *testing.T) {
-	spec := gspec.New(t)
 	filter := DateFactory([]core.Value{stringValue("%H:%M:%S%%")})
-	spec.Expect(filter("today", nil).(string)).ToEqual("15:04:05%")
+	assert.Equal(t, filter("today", nil).(string), "15:04:05%")
 }
 
 func TestDateWithSillyFormat(t *testing.T) {
-	spec := gspec.New(t)
 	filter := DateFactory([]core.Value{stringValue("%w  %U  %j")})
-	spec.Expect(filter("2014-01-10 21:31:28 +0800", nil).(string)).ToEqual("5  02  10")
+	assert.Equal(t, filter("2014-01-10 21:31:28 +0800", nil).(string), "5  02  10")
 }
 
 func TestDateWithOffset(t *testing.T) {
-	spec := gspec.New(t)
 	filter := DateFactory([]core.Value{stringValue("%Y %m %d %H %M %S"), intValue(5)})
-	spec.Expect(filter("now", nil).(string)).ToEqual("2006 01 02 20 04 05")
+	assert.Equal(t, filter("now", nil).(string), "2006 01 02 20 04 05")
 }
 
 func TestDateFormatting(t *testing.T) {
@@ -250,9 +246,10 @@ func TestDateOrdinalDays(t *testing.T) {
 }
 
 func TestDateDatesAndTimesWithOffset(t *testing.T) {
-	testFormat := func(test *testing.T, input string, format string, assert string) {
+	testFormat := func(test *testing.T, input string, format string, expected string) {
 		filter := DateFactory([]core.Value{stringValue(format), intValue(4)})
-		gspec.New(t).Expect(filter(input, nil).(string)).ToEqual(assert)
+
+		assert.Equal(t, filter(input, nil).(string), expected)
 	}
 
 	input := []string{"2/6/2013 13:15:00", "2013-02-06 13:15:00 -0000", "2013-02-06 13:15:00", "2013-02-06T13:15:00", "2013-02-06T13:15:00Z", "2/6/2013 1:15:00 PM", "2/6/2013 01:15:00 PM"}
@@ -286,9 +283,9 @@ func TestDateDatesAndTimesWithOffset(t *testing.T) {
 }
 
 func TestDateDatesAndTimesWithFloatOffset(t *testing.T) {
-	testFormat := func(test *testing.T, input string, format string, assert string) {
+	testFormat := func(test *testing.T, input string, format string, expected string) {
 		filter := DateFactory([]core.Value{stringValue(format), floatValue(4.5)})
-		gspec.New(t).Expect(filter(input, nil).(string)).ToEqual(assert)
+		assert.Equal(t, filter(input, nil).(string), expected)
 	}
 
 	input := []string{"2/6/2013 13:15:00", "2013-02-06 13:15:00 -0000", "2013-02-06 13:15:00", "2013-02-06T13:15:00", "2013-02-06T13:15:00Z", "2/6/2013 1:15:00 PM", "2/6/2013 01:15:00 PM"}
@@ -322,9 +319,9 @@ func TestDateDatesAndTimesWithFloatOffset(t *testing.T) {
 }
 
 func TestDateDatesAndTimesWithOffsetAndInputFormat(t *testing.T) {
-	testFormat := func(test *testing.T, input string, format string, assert string, inputFormat string) {
+	testFormat := func(test *testing.T, input string, format string, expected string, inputFormat string) {
 		filter := DateFactory([]core.Value{stringValue(format), intValue(4), stringValue(inputFormat)})
-		gspec.New(t).Expect(filter(input, nil).(string)).ToEqual(assert)
+		assert.Equal(t, filter(input, nil).(string), expected)
 	}
 
 	input := []string{"2-6-2013 17:15:00"}
@@ -359,9 +356,9 @@ func TestDateDatesAndTimesWithOffsetAndInputFormat(t *testing.T) {
 }
 
 func TestFormatDateDatesAndTimesWithInputFormat(t *testing.T) {
-	testFormat := func(test *testing.T, input string, format string, assert string, inputFormat string) {
+	testFormat := func(test *testing.T, input string, format string, expected string, inputFormat string) {
 		filter := DateFactory([]core.Value{stringValue(format), stringValue(inputFormat)})
-		gspec.New(t).Expect(filter(input, nil).(string)).ToEqual(assert)
+		assert.Equal(t, filter(input, nil).(string), expected)
 	}
 
 	input := []string{"2-6-2013 17:15:00"}
@@ -395,7 +392,7 @@ func TestFormatDateDatesAndTimesWithInputFormat(t *testing.T) {
 	}
 }
 
-func testFormat(t *testing.T, input string, format string, assert string) {
+func testFormat(t *testing.T, input string, format string, expected string) {
 	filter := DateFactory([]core.Value{stringValue(format)})
-	gspec.New(t).Expect(filter(input, nil).(string)).ToEqual(assert)
+	assert.Equal(t, filter(input, nil).(string), expected)
 }

@@ -5,21 +5,19 @@ import (
 	"testing"
 
 	"github.com/acstech/liquid/core"
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestOutputHandlesEmptyOutput(t *testing.T) {
-	spec := gspec.New(t)
 	output, err := newOutput(core.NewParser([]byte("{{}}")))
-	spec.Expect(output).ToBeNil()
-	spec.Expect(err).ToBeNil()
+	assert.Nil(t, output)
+	assert.Nil(t, err)
 }
 
 func TestOutputHandlesSpaceOnlyOutput(t *testing.T) {
-	spec := gspec.New(t)
 	output, err := newOutput(core.NewParser([]byte("{{   }}")))
-	spec.Expect(output).ToBeNil()
-	spec.Expect(err).ToBeNil()
+	assert.Nil(t, output)
+	assert.Nil(t, err)
 }
 
 func TestOutputExtractsASimpleStatic(t *testing.T) {
@@ -38,28 +36,24 @@ func TestOutputExtractsAStaticWithAnEndingQuote(t *testing.T) {
 }
 
 func TestOutputExtractionGivesErrorForUnclosedStatic(t *testing.T) {
-	spec := gspec.New(t)
 	output, err := newOutput(core.NewParser([]byte("{{ 'failure }}")))
-	spec.Expect(output).ToBeNil()
-	spec.Expect(err.Error()).ToEqual(`Invalid value, a single quote might be missing ("{{ 'failure }}" - line 1)`)
+	assert.Nil(t, output)
+	assert.Equal(t, err.Error(), `Invalid value, a single quote might be missing ("{{ 'failure }}" - line 1)`, "error message should match")
 }
 
 func TestOutputNoFiltersForStatic(t *testing.T) {
-	spec := gspec.New(t)
 	output, _ := newOutput(core.NewParser([]byte("{{'fun'}}")))
-	spec.Expect(len(output.(*Output).Filters)).ToEqual(0)
+	assert.Equal(t, len(output.(*Output).Filters), 0, "no filters should be found")
 }
 
 func TestOutputGeneratesErrorOnUnknownFilter(t *testing.T) {
-	spec := gspec.New(t)
 	_, err := newOutput(core.NewParser([]byte("{{'fun' | unknown }}")))
-	spec.Expect(err.Error()).ToEqual(`Unknown filter "unknown" ("{{'fun' | unknown }}" - line 1)`)
+	assert.Equal(t, err.Error(), `Unknown filter "unknown" ("{{'fun' | unknown }}" - line 1)`, "error message should match")
 }
 
 func TestOutputGeneratesErrorOnInvalidParameter(t *testing.T) {
-	spec := gspec.New(t)
 	_, err := newOutput(core.NewParser([]byte("{{'fun' | debug: 'missing }}")))
-	spec.Expect(err.Error()).ToEqual(`Invalid value, a single quote might be missing ("{{'fun' | debug: 'missing }}" - line 1)`)
+	assert.Equal(t, err.Error(), `Invalid value, a single quote might be missing ("{{'fun' | debug: 'missing }}" - line 1)`, "error message should match")
 }
 
 func TestOutputWithASingleFilter(t *testing.T) {
@@ -73,25 +67,22 @@ func TestOutputWithMultipleFilters(t *testing.T) {
 }
 
 func TestOutputWithMultipleFiltersHavingParameters(t *testing.T) {
-	spec := gspec.New(t)
 	output, err := newOutput(core.NewParser([]byte("{{'fun' | debug:1,2 | debug:'test' | debug : 'test' , 5}}")))
-	spec.Expect(err).ToBeNil()
+	assert.Nil(t, err)
 	assertFilters(t, output, "debug(0, 1, 2)", "debug(1, test)", "debug(2, test, 5)")
 }
 
 func TestOutputWithAnEscapeParameter(t *testing.T) {
-	spec := gspec.New(t)
 	output, err := newOutput(core.NewParser([]byte("{{'fun' | debug: 'te\\'st'}}")))
-	spec.Expect(err).ToBeNil()
+	assert.Nil(t, err)
 	assertFilters(t, output, "debug(0, te'st)")
 }
 
 func assertFilters(t *testing.T, output core.Code, expected ...string) {
-	spec := gspec.New(t)
 	filters := output.(*Output).Filters
-	spec.Expect(len(filters)).ToEqual(len(expected))
+	assert.Equal(t, len(filters), len(expected))
 	for index, filter := range filters {
 		actual := string(filter(strconv.Itoa(index), nil).([]byte))
-		spec.Expect(actual).ToEqual(expected[index])
+		assert.Equal(t, actual, expected[index])
 	}
 }
