@@ -3,13 +3,12 @@ package liquid
 import (
 	"testing"
 
-	"github.com/karlseguin/gspec"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestParsesATextOnlyTemplate(t *testing.T) {
-	spec := gspec.New(t)
 	template, _ := ParseString("it's over 9000", nil)
-	spec.Expect(len(template.Code)).ToEqual(1)
+	assert.Equal(t, len(template.Code), 1)
 	assertLiteral(t, template, 0, "it's over 9000")
 }
 
